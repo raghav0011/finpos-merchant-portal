@@ -1,0 +1,39 @@
+.mandatory-table td,
+.mandatory-table th {
+  padding: 8px 10px;
+  min-width: 24ch;
+}
+
+.mandatory-table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-height: 500px;
+  position: relative;
+}
+.mandatory-table th {
+  position: sticky;
+  top: 0;
+  z-index: 55;
+  background-color: #ccc;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.mandatory-table,
+.mandatory-table thead,
+.mandatory-table th,
+.mandatory-table td {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+.mandatory-table tr th {
+  text-align: center;
+}
+
+.mandatory-table td:last-child {
+  text-align: center;
+}

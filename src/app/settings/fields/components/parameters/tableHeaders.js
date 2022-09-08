@@ -1,0 +1,17 @@
+export const formFieldsTableHeaders = [
+  'drag',
+  'field_name',
+  'field_type',
+  'label_name',
+  'default_value',
+  'placeholder',
+  'is_required',
+  'is_active',
+  'is_read_only',
+  'label_align',
+  'min_length',
+  'max_length',
+  'regx',
+  'options',
+  '',
+];

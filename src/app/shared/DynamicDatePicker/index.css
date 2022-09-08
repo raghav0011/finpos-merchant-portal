@@ -1,0 +1,135 @@
+#dynamic-datepicker {
+  position: absolute;
+  top: 35px;
+}
+
+.date-wrapper {
+  position: absolute;
+  background-color: white !important;
+  border-radius: 5px;
+  width: 300px;
+  z-index: 9999;
+  padding: 8px 12px;
+  box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%),
+    0 9px 28px 8px rgb(0 0 0 / 5%);
+}
+
+.date-wrapper .date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid #b3b3b3; */
+  background-color: white;
+  height: 35px;
+}
+
+.date-header svg {
+  color: rgba(0, 0, 0, 0.25);
+  fill: rgba(0, 0, 0, 0.25);
+}
+
+.date-wrapper .date-header select {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.date-header-select {
+  border-color: rgba(0, 0, 0, 0.25);
+  border-style: dotted;
+  min-width: 55px;
+}
+
+.calender-week-header {
+  height: 30px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 30px;
+}
+
+.date-header-icon {
+  enable-background: new 0 0 490.8 490.8;
+  /*height: 10px;*/
+  padding-left: 2px;
+  padding-right: 2px;
+  cursor: pointer;
+  height: 15px;
+  width: 20px;
+}
+
+.date-body table {
+  width: 100%;
+  /* border: 1px solid #b3b3b3; */
+}
+
+.date-body table tr th,
+.date-body table tr td {
+  text-align: center;
+  font-size: 13px;
+  /* max-width: 10px; */
+  padding: 4px 7px;
+}
+
+.date-body table tr th {
+  padding-top: 5px;
+  font-weight: 700;
+  padding-bottom: 5px;
+  height: 30px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 30px;
+}
+
+.date-body table tr .date-selectable {
+  cursor: pointer;
+  /* border: 1px solid #b3b3b3; */
+}
+
+.date-selected div {
+  color: #fff;
+  background: #1890ff;
+  border-radius: 6px;
+  font-weight: bolder;
+}
+
+.date-today div {
+  z-index: 1;
+  border: 1px solid #1890ff;
+  border-radius: 6px;
+}
+
+.date-disabled {
+  cursor: not-allowed !important;
+  background-color: #eaeaea;
+  color: #818181;
+}
+
+.datepicker-input-div {
+  position: relative;
+  width: 100%;
+}
+.datepicker-input-div input {
+  width: 100%;
+}
+
+.datepicker-input-postfix {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.calender-footer {
+  width: min-content;
+  min-width: 100%;
+  line-height: 38px;
+  text-align: center;
+  border-bottom: 1px solid transparent;
+}
+
+.today-btn {
+  transition: all ease-in-out 0.22s;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.today-btn:hover,
+.today-btn:focus {
+  cursor: pointer;
+  /* font-weight: 500; */
+  font-size: 15px;
+}

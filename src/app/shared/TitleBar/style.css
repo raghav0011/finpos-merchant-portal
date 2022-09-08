@@ -1,0 +1,14 @@
+/* title bar */
+
+.article-title-row {
+  padding: 10px 24px;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  /*border: solid 1px #e5e5e5;*/
+  box-shadow: 1px 2px 6px #dbdbdb;
+}
+
+.article-title {
+  margin-bottom: 0;
+}

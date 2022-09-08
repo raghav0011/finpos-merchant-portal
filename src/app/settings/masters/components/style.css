@@ -1,0 +1,16 @@
+
+.masterModal .ant-col.ant-col-24.ant-form-item-label{
+    padding: 0;
+    margin-top:1ch;
+}
+
+.masterModal button.ant-btn.button-root.edit.mr-1 {
+    margin-top: 1ch;
+}
+.masterModal button.ant-btn.button-root.mr-1 {
+    margin-top: 1ch;
+}
+
+.masterModal .ant-col.ant-col-24.ant-form-item-label:first-child{
+    margin-top:0ch;
+}

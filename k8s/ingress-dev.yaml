@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations: {
+    "kubernetes.io/ingress.class": "nginx",
+    "nginx.ingress.kubernetes.io/add-base-url": "true",
+    "nginx.ingress.kubernetes.io/rewrite-target": "/$2",
+    "nginx.ingress.kubernetes.io/ssl-redirect": "true"
+  }
+  name: finpay-adminweb-ingress
+  #namespace: default
+spec:
+  rules:
+    - host: dev.citytech.global
+      http:
+        paths:
+          - path: /finpay/admin(/|$)(.*)
+            backend:
+              serviceName: finpay-admin-web-portal-service
+              servicePort: 80
+
+  tls:
+    - hosts:
+        - citytech.global
+      secretName: citytech-cert

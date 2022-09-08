@@ -1,0 +1,98 @@
+{
+  "homepage": ".",
+  "name": "finpay-mgmt-portal",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@loadable/component": "^5.15.2",
+    "@react-querybuilder/antd": "^4.2.3",
+    "@reduxjs/toolkit": "^1.7.2",
+    "antd": "^4.18.7",
+    "antd-form-builder": "^2.1.4",
+    "antd-mask-input": "^0.1.15",
+    "array-move": "^4.0.0",
+    "axios": "^0.26.0",
+    "classnames": "^2.3.1",
+    "connected-react-router": "^6.9.2",
+    "core-js": "^3.21.0",
+    "crypto-js": "^4.1.1",
+    "echarts": "^5.3.0",
+    "echarts-for-react": "^3.0.2",
+    "env-cmd": "^10.1.0",
+    "history": "^4.10.1",
+    "i18next": "^20.6.1",
+    "i18next-browser-languagedetector": "^6.1.2",
+    "i18next-xhr-backend": "^3.2.2",
+    "immutable": "^4.0.0",
+    "joi": "^17.6.0",
+    "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.3",
+    "rc-queue-anim": "^2.0.0",
+    "react": "^17.0.2",
+    "react-app-polyfill": "^2.0.0",
+    "react-country-flag": "^2.3.1",
+    "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.4",
+    "react-fakers": "^1.0.3-rc1",
+    "react-i18next": "^11.12.0",
+    "react-input-mask": "^2.0.4",
+    "react-querybuilder": "^4.2.3",
+    "react-redux": "^7.2.5",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^4.0.3",
+    "react-sortable-hoc": "^2.0.0",
+    "react-to-print": "^2.14.4",
+    "react-verification-code-input": "^1.2.9",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0",
+    "regenerator-runtime": "^0.13.9",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "prettier": "prettier --write ./src/**/**/**/*"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "development": [],
+    "production": []
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.17.2",
+    "babel-plugin-import": "^1.13.3",
+    "customize-cra": "^1.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.2",
+    "husky": "^7.0.4",
+    "less": "^4.1.1",
+    "less-loader": "^6.2.0",
+    "lint-staged": "^12.3.4",
+    "loaders.css": "^0.1.2",
+    "moxios": "^0.4.0",
+    "node-sass": "^6.0.1",
+    "prettier": "^2.5.1",
+    "prop-types": "^15.8.1",
+    "react-app-rewired": "^2.1.8",
+    "react-test-renderer": "^17.0.2",
+    "redux-immutable-state-invariant": "^2.1.0",
+    "redux-mock-store": "^1.5.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./src/**/**/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --trailing-comma es5 --single-quote --write"
+    ]
+  }
+}

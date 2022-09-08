@@ -1,0 +1,314 @@
+/* buttons */
+:root {
+  --submit: #1890ff;
+  --reset: #fff;
+  --add: #1890ff;
+  --edit: #1890ff;
+  --xls-export: #16c316;
+  --pdf-export: #bc150a;
+  --table-header: #1890ff;
+  --table-header-hover: rgba(54, 48, 74, 0.75);
+  --row-dark: #e2e2e2;
+  --row-light: #eee;
+  --row-hover: #ff8a8a;
+  --reset-text: black;
+  --cancel-text: Red;
+  --table-header-text: white;
+  --table-row-font-size: 13px;
+}
+.submit {
+  color: white !important;
+  background-color: var(--submit) !important;
+}
+
+.submit:hover,
+.submit:active,
+.submit:focus {
+  background-color: var(--submit) !important;
+  border-color: var(--submit) !important;
+  color: white !important;
+}
+
+.reset {
+  background-color: var(--reset) !important;
+  color: var(--reset-text) !important;
+}
+
+.reset:hover,
+.reset:active,
+.reset:focus {
+  background-color: var(--reset) !important;
+  /* border-color: var(--reset) !important; */
+  color: var(--reset-text) !important;
+}
+.cancel {
+  background-color: var(--reset) !important;
+  color: var(--cancel-text) !important;
+}
+
+.cancel:hover,
+.cancel:active,
+.cancel:focus {
+  background-color: var(--reset) !important;
+  /* border-color: var(--reset) !important; */
+  color: var(--cancel-text) !important;
+}
+.add {
+  color: white !important;
+  background-color: var(--add) !important;
+}
+
+.add:hover,
+.add:active,
+.add:focus {
+  background-color: var(--add) !important;
+  border-color: var(--add) !important;
+  color: white !important;
+}
+
+.edit {
+  color: white !important;
+  background-color: var(--edit) !important;
+}
+
+.edit:hover,
+.edit:active,
+.edit:focus {
+  background-color: var(--edit) !important;
+  border-color: var(--edit) !important;
+  color: white !important;
+}
+
+.xls-export {
+  color: white !important;
+  background-color: var(--xls-export) !important;
+}
+
+.xls-export:hover,
+.xls-export:active,
+.xls-export:focus {
+  background-color: var(--xls-export) !important;
+  border-color: var(--xls-export) !important;
+  color: white !important;
+}
+.pdf-export {
+  color: white !important;
+  background-color: var(--pdf-export) !important;
+}
+
+.pdf-export:hover,
+.pdf-export:active,
+.pdf-export:focus {
+  background-color: var(--pdf-export) !important;
+  border-color: var(--pdf-export) !important;
+  color: white !important;
+}
+
+.full-btn {
+  --margin: 0.5rem;
+  width: calc(100%);
+  min-width: 16ch;
+}
+
+.quarter-btn {
+  --margin: 0.5rem;
+  width: calc(100% / 4);
+  min-width: 16ch;
+}
+.half-btn {
+  --margin: 0.5rem;
+  width: calc(100% / 2);
+  min-width: 16ch;
+}
+
+.button-root {
+  min-width: 10em;
+  height: 32px;
+  transition: 0.2s ease-in-out 0s;
+}
+
+.button-root:hover {
+  transform: scale(1.01);
+}
+
+/* tables */
+
+.table-root .ant-table-cell-fix-right,
+.table-root .ant-table-cell-fix-right-first {
+  background-color: inherit;
+}
+
+.table-root .ant-table-thead tr th {
+  background-color: var(--table-header);
+  color: var(--table-header-text);
+}
+
+.table-root .ant-table-thead tr .ant-table-column-has-sorters:hover {
+  background-color: var(--table-header-hover);
+  color: var(--table-header-text);
+}
+
+.table-default-row {
+  font-size: var(--table-row-font-size);
+}
+
+.table-row-dark {
+  background-color: var(--row-dark);
+}
+
+.table-row-dark .ant-table-column-sort {
+  background-color: var(--row-dark);
+}
+
+.table-row-light {
+  background-color: var(--row-light);
+}
+
+.table-row-light .ant-table-column-sort {
+  background-color: var(--row-light);
+}
+
+.table-row-highlighted {
+  background-color: var(--row-hover) !important;
+}
+
+.table-row-summary {
+  background-color: #c1c1c1;
+}
+
+/* description */
+.custom-description tr:nth-child(2n) {
+  background-color: inherit;
+}
+
+/* masked input with search */
+
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-variant: initial;
+  background-color: rgb(255, 255, 255);
+  outline: none;
+  box-shadow: rgb(0 0 0 / 12%) 0px 3px 6px -4px, rgb(0 0 0 / 8%) 0px 6px 16px 0px,
+    rgb(0 0 0 / 5%) 0px 9px 28px 8px;
+  position: absolute;
+  width: 100%;
+  z-index: 1050;
+  padding: 2px;
+  overflow: hidden;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 4px 12px;
+  margin: 0;
+}
+.dropdown-item:hover {
+  background-color: #e9e9e9;
+}
+
+/* uploader */
+
+.single-uploader .ant-upload {
+  width: 100%;
+}
+
+.single-uploader .ant-upload {
+  width: 100%;
+}
+
+.single-uploader .ant-upload-list-picture-card {
+  text-align: center;
+}
+
+/* dragable Card */
+.dragCard-container {
+  min-width: 150px;
+  background-color: rgba(255, 255, 255, 0.98);
+  z-index: 9999;
+  border: 1.2px solid rgba(202, 202, 202, 0.7);
+  padding: 0.25em 1em;
+  border-radius: 25px;
+  position: absolute;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+.drag-btn-container {
+  padding: 0.25em;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  cursor: move;
+}
+
+.drag-btn {
+  background-color: rgba(82, 163, 184, 0.4);
+  border: 1.2px solid rgba(202, 202, 202, 0.9);
+  color: rgb(255, 255, 255);
+  padding: 0.4em 1.75em;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+}
+
+.drag-btn:hover {
+  transform: scale(1.01);
+}
+
+/* dynamic search */
+
+.dynamic-search .rc-virtual-list-holder-inner {
+  overflow-y: scroll; /* Add the ability to scroll y axis*/
+}
+.dynamic-search .rc-virtual-list-holder-inner::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.dynamic-search .rc-virtual-list-holder-inner::-webkit-scrollbar-track {
+  background: #ccc;
+}
+
+/* Handle */
+.dynamic-search .rc-virtual-list-holder-inner::-webkit-scrollbar-thumb {
+  background: #145896;
+}
+
+/* Handle on hover */
+.dynamic-search .rc-virtual-list-holder-inner::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dynamic-search .rc-virtual-list-scrollbar {
+  display: block !important;
+}
+
+/* customizable table popover */
+.customizable-table-popover .ant-popover-inner-content {
+  padding: 0px;
+}
+.customizable-table-popover-content {
+  padding: 12px 18px;
+  overflow: auto;
+}
+
+.customizable-table-popover-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.customizable-table-popover-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customizable-table-popover-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+.customizable-table-popover-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

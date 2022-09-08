@@ -1,0 +1,17 @@
+{
+  "breadcrumb.dashboard" : "لوحة القيادة",
+
+
+  "login.userId.label": "هوية المستخدم",
+  "login.password.label": "كلمه السر",
+  "login.login.label": "تسجيل الدخول",
+  "login.unable.login.label": "غير قادر على تسجيل الدخول؟",
+  "login.forgot.password.label": "هل نسيت كلمة المرور",
+
+  "forgot.password.title": "أدخل عنوان بريدك الإلكتروني المسجل أدناه لتلقي معلومات حول كيفية إعادة تعيين كلمة المرور الخاصة بك.",
+
+  "agents.new.title" : " إضافة وكيل",
+  "breadcrumb.agents" : "عملاء",
+  "agents.breadcrumb.add" : "إضافة"
+
+}

@@ -1,0 +1,51 @@
+.page-error {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding: 3rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .page-error {
+    padding: 7.5rem 0 0;
+  }
+}
+
+.page-error .err-container {
+  padding: 1rem 0.625rem;
+}
+
+.page-error .err-code-container {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 2px solid #01bcd4;
+  padding: 28px;
+  margin: 0 auto 1.5rem;
+}
+
+.page-error .err-code-container .err-code {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background-color: #01bcd4;
+  color: #fff;
+}
+
+.page-error .err-code-container h1 {
+  font-size: 5.625rem;
+  line-height: 220px;
+  font-weight: 300;
+}
+
+.page-error h2 {
+  font-size: 1.875rem;
+  line-height: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  opacity: 0.8;
+}
+/*# sourceMappingURL=index.css.map */

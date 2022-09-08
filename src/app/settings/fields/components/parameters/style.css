@@ -1,0 +1,64 @@
+.field-table td:not(.check),
+/* .field-table th, */
+.field-table th:not(.check) {
+  padding: 8px 10px;
+  min-width: 24ch;
+ 
+}
+
+.field-table tr td:last-child,
+.field-table tr td:first-child,
+.field-table tr th:last-child,
+.field-table tr th:first-child {
+  padding: 5px 8px;
+  min-width: 6ch;
+}
+.field-table tr td:last-child,
+.field-table tr td:first-child,
+.field-table tr th:first-child {
+  text-align: center;
+}
+
+.field-table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-height: 500px;
+  position: relative;
+}
+
+.field-table thead
+{
+  position: sticky;
+  top: 0;
+  z-index: 55;
+  background-color: #ccc;
+}
+
+.field-table,
+.field-table thead,
+.field-table th,
+.field-table td {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+/* drag */
+.row-dragging {
+  background: #fafafa;
+  border: 1px solid #ccc;
+}
+
+.row-dragging td {
+  padding: 16px;
+}
+
+.row-dragging .drag-visible {
+  visibility: visible;
+}
+
+.check {
+  padding: 8px 10px;
+  width: 16ch;
+  text-align: center;
+}

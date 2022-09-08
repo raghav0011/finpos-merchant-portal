@@ -1,0 +1,47 @@
+.dynamic-delete-button {
+  cursor: pointer;
+  font-size: 22px;
+  transition: all 0.3s;
+  color: #ff2323;
+  margin-top: 7px;
+}
+
+.dynamic-delete-button:hover {
+  color: #777;
+  border-color: #ff2323 !important;
+}
+
+.dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-custom-field {
+  color: #fff;
+  background-color: #0747a6;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+.btn-custom-field:hover {
+  background-color: #0065ff !important;
+  color: #fff;
+  border-color: #0065ff !important;
+}
+
+.filter-field-table tr:nth-child(even) {
+  background-color: #fff;
+}
+
+.filter-field-table .table th,
+.filter-field-table .table td {
+  padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+}
+
+.filter-field-table .table {
+  min-width: 720px;
+}
+
+.search-form .ant-form-item {
+  margin-bottom: 5px;
+}
