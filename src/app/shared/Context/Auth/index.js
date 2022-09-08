@@ -49,7 +49,6 @@ const AuthProvider = (props) => {
     return axios
       .post(API_URL + '/auths/v1/auths', { userId, password })
       .then((response) => {
-        console.log('🚀 ~ file: index.js ~ line 52 ~ .then ~ response', response);
         setLoading(false);
         return response;
       })
