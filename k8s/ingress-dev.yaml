@@ -7,16 +7,16 @@ metadata:
     "nginx.ingress.kubernetes.io/rewrite-target": "/$2",
     "nginx.ingress.kubernetes.io/ssl-redirect": "true"
   }
-  name: finpay-adminweb-ingress
+  name: finpos-merchantweb-ingress
   #namespace: default
 spec:
   rules:
     - host: dev.citytech.global
       http:
         paths:
-          - path: /finpay/admin(/|$)(.*)
+          - path: /finpos-merchant-portal(/|$)(.*)
             backend:
-              serviceName: finpay-admin-web-portal-service
+              serviceName: finpos-merchant-web-portal-service
               servicePort: 80
 
   tls:

@@ -15,13 +15,13 @@ import Logo from '../../app/shared/Logo';
 import { toggleCollapsedNav, toggleOffCanvasMobileNav } from '../../layout/duck/actions';
 import { AuthContext } from '../../app/shared/Context/Auth';
 import { USER_FULL_NAME } from '../../constants';
+import { getLocalStorage } from '../../utils/storageUtil';
 
 const { Header } = Layout;
 
 const AppHeader = (props) => {
   const { logout } = useContext(AuthContext);
   const { collapsedNav, offCanvasMobileNav, colorOption, showLogo, uiHeaderData } = props;
-
   const onToggleCollapsedNav = () => {
     const { handleToggleCollapsedNav, collapsedNav } = props;
     handleToggleCollapsedNav(!collapsedNav);
@@ -118,7 +118,7 @@ const AppHeader = (props) => {
                   src={uiHeaderData?.profilePicture || '/assets/avatars/6.png'}
                   size="small"
                 />
-                <span className="avatar-text d-none d-md-inline">MERCHANT NAME</span>
+                <span className="avatar-text d-none d-md-inline">{uiHeaderData?.fullName}</span>
               </span>
             </Dropdown>
           </div>

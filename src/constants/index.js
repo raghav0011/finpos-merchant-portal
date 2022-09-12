@@ -1,20 +1,20 @@
 export const API_URL = `${process.env.REACT_APP_REST_API_HOST}`;
-export const PERMISSION_KEY = 'cityremit-permissions';
-export const MENU_KEY = 'cityremit-menus';
-export const LANGUAGE_KEY = 'cityremit-language';
+export const PERMISSION_KEY = 'finpos-merchant-permissions';
+export const MENU_KEY = 'finpos-merchant-menus';
+export const LANGUAGE_KEY = 'finpos-merchant-language';
 export const DATE_FORMAT = 'MM/DD/YYYY HH:mm:ss';
 export const PAGE_SIZE = 10;
-export const ENFORCE_PASSWORD_CHANGE = 'cityremit-platform-enforce-password-change';
-export const ENFORCE_TYPE = 'cityremit-platform-enforceType';
+export const ENFORCE_PASSWORD_CHANGE = 'finpos-merchant-enforce-password-change';
+export const ENFORCE_TYPE = 'finpos-merchant-enforceType';
 export const SEARCH_DATE_FORMAT = 'MM-DD-YYYY';
 export const CUSTOM_FIELD_DATE_FORMAT = 'YYYY-MM-DD';
 export const PENDING_DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-export const JWT_TOKEN = 'cityremit-token';
-export const USER_FULL_NAME = 'cityremit-fullName';
-export const LOGGED_IN_USER = 'cityremit-user';
-export const LOGGED_IN_USER_ID = 'cityremit-user-id';
-export const LOGGED_IN_USER_IMAGE = 'cityremit-user-image';
+export const JWT_TOKEN = 'finpos-merchant-token';
+export const USER_FULL_NAME = 'finpos-merchant-fullName';
+export const LOGGED_IN_USER = 'finpos-merchant-user';
+export const LOGGED_IN_USER_ID = 'finpos-merchant-user-id';
+export const LOGGED_IN_USER_IMAGE = 'finpos-merchant-user-image';
 
 export const CUSTOMER_TYPE = 'CUSTOMER_TYPE';
 export const SENDER = 'sender';
