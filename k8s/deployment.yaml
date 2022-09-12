@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: finpay-admin-web-portal
+  name: finpos-merchant-web-portal
   labels:
-    app: finpay-admin-web-portal
+    app: finpos-merchant-web-portal
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: finpay-admin-web-portal
+      app: finpos-merchant-web-portal
   template:
     metadata:
       labels:
-        app: finpay-admin-web-portal
+        app: finpos-merchant-web-portal
     spec:
       containers:
-        - name: finpay-admin-web-portal
-          image: reg.citytech.global/finpay/finpay-admin-web-portal:${BUILD_NUMBER}
+        - name: finpos-merchant-web-portal
+          image: reg.citytech.global/finpos/finpos-merchant-web-portal:${BUILD_NUMBER}
           imagePullPolicy: Always
           ports:
             - containerPort: 80

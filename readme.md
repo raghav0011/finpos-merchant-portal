@@ -12,8 +12,8 @@ City Remit Management Web Portal
 On the command prompt run the following commands:
 
 ``` 
- $ git clone https://krishnatimilsina@bitbucket.org/Citytech_global/cityremit-mgmt-web-portal.git
- $ cd cityremit-mgmt-web-portal
+ $ git clone https://Basantakhadka@bitbucket.org/Citytech_global/finpos-merchant-portal.git
+ $ cd FINPOS-MERCHANT-WEB-PORTAl
  $ cp .env.example .env (edit it with REST API URL)
  $ npm install
 ```

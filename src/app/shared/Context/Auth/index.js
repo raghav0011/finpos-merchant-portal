@@ -11,6 +11,7 @@ import {
   LOGGED_IN_USER,
   LOGGED_IN_USER_ID,
   LOGGED_IN_USER_IMAGE,
+  ENFORCE_PASSWORD_CHANGE,
 } from '../../../../constants';
 import { clearLocalStorage, getLocalStorage, setLocalStorage } from '../../../../utils/storageUtil';
 import history from '../../../../utils/history';
@@ -39,22 +40,41 @@ const AuthProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(isAuthenticated() || false);
   const [errorMessage, setErrorMessage] = useState(undefined);
-  const [otpToken, setOtpToken] = useState(undefined);
-  const [tokenKey, setTokenKey] = useState(undefined);
+  // const [otpToken, setOtpToken] = useState(undefined);
+  // const [tokenKey, setTokenKey] = useState(undefined);
 
-  const state = { errorMessage, user, loading, authenticated, userId, setErrorMessage, otpToken };
+  const state = { errorMessage, user, loading, authenticated, userId, setErrorMessage };
 
-  const login = ({ userId, password }) => {
+  const handleLoginActions = (response) => {
+    setLocalStorage(JWT_TOKEN, response.data.data.token);
+    // setLocalStorage(LOGO_URL, response.data.data.bankLogoUrl);
+    // setLocalStorage(SMALL_LOGO_URL, response.data.data.bankLogoThumbnailUrl);
+    // setLocalStorage(PERMISSION_KEY, response.data.data.permissions);
+    setLocalStorage(USER_FULL_NAME, response.data.data.fullName);
+    // setLocalStorage(ENFORCE_TYPE, response.data.data.enforceType);
+    setLocalStorage(ENFORCE_PASSWORD_CHANGE, response.data.data.enforcePasswordChange);
+    dispatch(updateUiHeader(response.data.data.fullName));
+    setAuthenticated(true);
+    if (getLocalStorage(ENFORCE_PASSWORD_CHANGE)) {
+      // history.push('/profile/change-password');
+      history.push('/dashboard');
+    } else {
+      history.push('/dashboard');
+    }
+  };
+
+  const login = ({ user_id, password }) => {
     setLoading(true);
     return axios
-      .post(API_URL + '/auths/v1/auths', { userId, password })
+      .post(API_URL + '/v1/auth/login', { user_id, password })
       .then((response) => {
         setLoading(false);
+        handleLoginActions(response);
         return response;
       })
       .catch((err) => {
         setLoading(false);
-        setErrorMessage(err.response.data);
+        // setErrorMessage(err;
       });
   };
 
@@ -164,27 +184,27 @@ const AuthProvider = (props) => {
   //     });
   // };
 
-  // const logout = () => {
-  //   axios.post(
-  //     API_URL + '/config/v1/auths/logout',
-  //     {},
-  //     {
-  //       headers: {
-  //         Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
-  //       },
-  //     }
-  //   );
-  //   clearLocalStorage(JWT_TOKEN);
-  //   clearLocalStorage(PERMISSION_KEY);
-  //   clearLocalStorage(USER_FULL_NAME);
-  //   clearLocalStorage(LOGGED_IN_USER);
-  //   clearLocalStorage(LOGGED_IN_USER_ID);
-  //   clearLocalStorage(LOGGED_IN_USER_IMAGE);
+  const logout = () => {
+    // axios.post(
+    //   API_URL + '/config/v1/auths/logout',
+    //   {},
+    //   {
+    //     headers: {
+    //       Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
+    //     },
+    //   }
+    // );
+    clearLocalStorage(JWT_TOKEN);
+    // clearLocalStorage(PERMISSION_KEY);
+    clearLocalStorage(USER_FULL_NAME);
+    // clearLocalStorage(LOGGED_IN_USER);
+    // clearLocalStorage(LOGGED_IN_USER_ID);
+    clearLocalStorage(ENFORCE_PASSWORD_CHANGE);
 
-  //   setUser({});
-  //   setAuthenticated(false);
-  //   history.push('/');
-  // };
+    setUser({});
+    setAuthenticated(false);
+    history.push('/');
+  };
 
   return (
     <AuthContext.Provider
@@ -192,7 +212,7 @@ const AuthProvider = (props) => {
       value={{
         ...state,
         login: login,
-        // logout: logout,
+        logout: logout,
         // otpVerify,
         // resend,
         // resetPassword,

@@ -32,8 +32,11 @@ const LoginForm = () => {
 
               <Form onFinish={onFinish} className="login-form">
                 <FormItem
-                  name="userId"
-                  rules={[{ required: true, message: 'Please input your username' }]}
+                  name="user_id"
+                  rules={[
+                    { required: true, message: 'Please input your username' },
+                    { type: 'email', message: 'Please input valid username' },
+                  ]}
                 >
                   <Input
                     size="large"
