@@ -17,12 +17,12 @@ import { getLocalStorage, setLocalStorage, clearLocalStorage } from './storageUt
 const normalHeaders = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
+  'X-XSRF-TOKEN': `${getLocalStorage(JWT_TOKEN)}`,
 };
 const downloadableHeaders = {
   Accept: '*/*',
   'Content-Type': 'application/json',
-  Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
+  'X-XSRF-TOKEN': `${getLocalStorage(JWT_TOKEN)}`,
 };
 
 export const httpBase = (isDownloadable = false) => {
