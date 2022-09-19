@@ -18,15 +18,7 @@ const AppMenu = (props) => {
   const activeMenuKey = urlToList(props.location.pathname);
   const [rootMenuItemKeys] = useState(['/dashboard', '/customers', '/send', '/transactions'] || []); // without submenu
   const [rootSubmenuKeys] = useState(
-    [
-      '/roles',
-      '/users',
-      '/settings',
-      '/masters',
-      '/password-policy',
-      '/form-fields',
-      '/api-logs',
-    ] || []
+    ['/roles', '/users', '/settings', '/masters', '/password-policy'] || []
   ); // with submenu
   const [openKeys, setOpenKeys] = useState(activeMenuKey || []);
 
