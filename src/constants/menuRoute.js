@@ -14,5 +14,12 @@ const menuRoutes = [
   //   key: 'usersManagement',
   //   // rights: ['0'],
   // },
+
+  {
+    menuName: 'Transactions',
+    name: 'transactions',
+    iconName: 'DollarCircleOutlined',
+    path: '/transactions',
+  },
 ];
 export default menuRoutes;

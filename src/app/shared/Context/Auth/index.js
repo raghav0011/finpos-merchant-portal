@@ -63,18 +63,23 @@ const AuthProvider = (props) => {
     }
   };
 
-  const login = ({ user_id, password }) => {
+  const login = ({ userId, password }) => {
     setLoading(true);
     return axios
-      .post(API_URL + '/v1/auth/login', { user_id, password })
+      .post(API_URL + '/v1/auth/login', { userId, password })
       .then((response) => {
-        setLoading(false);
-        handleLoginActions(response);
-        return response;
+        if (response.data.message === 'sucess') {
+          setLoading(false);
+          handleLoginActions(response);
+          // return response;
+        } else {
+          //
+          return response;
+        }
       })
       .catch((err) => {
         setLoading(false);
-        // setErrorMessage(err;
+        setErrorMessage(err.response.data);
       });
   };
 

@@ -36,6 +36,7 @@
     "react-draggable": "^4.4.4",
     "react-fakers": "^1.0.3-rc1",
     "react-i18next": "^11.12.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-input-mask": "^2.0.4",
     "react-querybuilder": "^4.2.3",
     "react-redux": "^7.2.5",
