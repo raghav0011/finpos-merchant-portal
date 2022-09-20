@@ -20,11 +20,7 @@ const List = (props) => {
     fetchAllTxnList,
     // transactionFilterFields,
   } = props;
-  console.log(
-    '🚀 ~ file: AllTransactions.js ~ line 23 ~ List ~ transactionPagination',
-    transactionPagination
-  );
-  console.log('🚀 ~ file: AllTransactions.js ~ line 23 ~ List ~ pagination', pagination);
+
   const [fieldState, setFieldState] = useState({});
 
   const columnsWithOutReceipt = [
@@ -227,7 +223,7 @@ const List = (props) => {
   const fetchMoreData = () => {
     const formData = {
       // ...fieldState,
-      pageNumber: transactionPagination.current + 1,
+      pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
 

@@ -58,7 +58,7 @@ export const transactionSlice = createSlice({
         (action) => transactionListFulfilled.includes(action.type),
         (state, action) => {
           state.loading = false;
-          state.payload = action.payload.data.data;
+          state.payload = [...state.payload, ...action.payload.data.data];
           state.errors = {};
           state.pagination = {
             current: action.payload.data.currentPage,

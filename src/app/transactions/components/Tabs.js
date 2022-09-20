@@ -42,9 +42,24 @@ const Tab = (props) => {
     return;
   };
 
+  const fetchAllTxnList = () => {
+    cleanTransactionList();
+    fetchTransactionListByCriteria({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER }).then(
+      (response) => {
+        if (response.payload.message === 'SUCESS') {
+          setPagination({
+            ...pagination,
+            pageNumber: response.payload.data.currentPage,
+            totalRecord: response.payload.data.totalRecord,
+          });
+        }
+      }
+    );
+  };
+
   const fetchCurrentTabList = (currentTab) => {
     cleanTransactionList();
-    // setPagination({ pageSize: PAGE_SIZE_LARGE });
+    setPagination({ pageSize: PAGE_SIZE });
     switch (currentTab) {
       case 'todayTransactions':
         // fetchAllTxnList();
@@ -63,25 +78,6 @@ const Tab = (props) => {
       default:
         break;
     }
-  };
-
-  const fetchAllTxnList = () => {
-    cleanTransactionList();
-    fetchTransactionListByCriteria({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER }).then(
-      (response) => {
-        console.log(
-          '🚀 ~ file: Tabs.js ~ line 71 ~ fetchTransactionListByCriteria ~ response',
-          response
-        );
-        if (response.payload.message === 'SUCESS') {
-          setPagination({
-            ...pagination,
-            pageNumber: response.payload.data.currentPage,
-            totalRecord: response.payload.data.totalRecord,
-          });
-        }
-      }
-    );
   };
 
   return (
