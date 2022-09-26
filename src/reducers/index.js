@@ -10,7 +10,10 @@ import uiReducer, { headerProfileReducer } from '../layout/duck/uiReducer';
 // import { roleSlice, roleFilterFieldSlice, permissionSlice } from '../app/role/slice';
 import passwordPolicySlice from '../app/settings/PasswordPolicy/slice';
 
-import { transactionSlice } from '../app/transactions/slice/transactionSlice';
+import {
+  transactionSlice,
+  transactionFilterFieldSlice,
+} from '../app/transactions/slice/transactionSlice';
 
 import dashboardSlice from '../app/dashboard/slice/dashboardSlice';
 
@@ -37,6 +40,8 @@ const rootReducer = combineReducers({
   passwordPolicies: passwordPolicySlice.reducer,
 
   transactions: transactionSlice.reducer,
+  transactionFilterField: transactionFilterFieldSlice.reducer,
+
   summary: dashboardSummarySlice.reducer,
 });
 

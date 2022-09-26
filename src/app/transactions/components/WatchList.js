@@ -14,10 +14,10 @@ const List = (props) => {
     transactions,
     transactionLoading,
     transactionPagination,
-    fetchTransactionListByCriteria,
+    fetchTransactionWatchListWithCriteria,
     pagination,
     setPagination,
-    fetchAllTxnList,
+    fetchWatchListTxnList,
     transactionFilterFields,
   } = props;
 
@@ -223,7 +223,7 @@ const List = (props) => {
 
   const fetchMoreData = () => {
     const formData = {
-      // ...fieldState,
+      ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
@@ -232,7 +232,7 @@ const List = (props) => {
       pagination.pageNumber < Math.ceil(pagination.totalRecord / pagination.pageSize) &&
       transactionPagination?.current
     ) {
-      fetchTransactionListByCriteria(formData).then((response) => {
+      fetchTransactionWatchListWithCriteria(formData).then((response) => {
         if (response.payload.message === 'SUCESS') {
           setPagination({
             ...pagination,
@@ -290,7 +290,7 @@ const List = (props) => {
                 filterFields={transactionFilterFields}
                 searchCriteria={() => {
                   setFieldState({});
-                  fetchAllTxnList();
+                  fetchWatchListTxnList();
                 }}
               />
             </Form>
@@ -304,44 +304,13 @@ const List = (props) => {
           onClick={() => {
             form.resetFields();
             setFieldState({});
-            fetchAllTxnList();
+            fetchWatchListTxnList();
           }}
           className="btn-custom-field mb-2 mt-n4"
           // icon="reload"
         >
           Refresh
         </Button>
-
-        <div className="d-flex justify-content-center">
-          <div className="px-2 bold">
-            Count :{' '}
-            <span style={{ fontWeight: 'normal' }}>
-              {/* {transactionsCount ? internationalFormattedNumber(transactionsCount) : '-'} */}
-            </span>
-          </div>
-          <div className="px-2 bold">
-            Total :{' '}
-            {/* {transactionsAmount &&
-              transactionsAmount.map(amount => {
-                return (
-                  <span
-                    style={{
-                      fontWeight: 'normal',
-                      border: '1px solid #CCC',
-                      padding: '5px',
-                      marginRight: '2px',
-                      borderRadius: '10px',
-                    }}
-                  >
-                    {amount
-                      ? `${amount.currencyCode} ${internationalFormattedAmount(amount.amount)} `
-                      : '-'}
-                  </span>
-                );
-              })} */}
-          </div>
-        </div>
-        <div></div>
       </div>
 
       <div className="box box-default box-ant-table-v1">

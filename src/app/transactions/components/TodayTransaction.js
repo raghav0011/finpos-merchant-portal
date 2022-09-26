@@ -10,18 +10,18 @@ import { Card, Form, Button, Icon, Tooltip, Upload, Col } from 'antd';
 
 const List = (props) => {
   const {
-    // fetchAllTxnList,
+    fetchTodayTxnList,
+    initialReportModel,
     transactions,
     transactionLoading,
     transactionPagination,
-    fetchTransactionListByCriteria,
+    fetchTodayTransactionWithCriteria,
     pagination,
     setPagination,
-    fetchAllTxnList,
     transactionFilterFields,
   } = props;
 
-  const [fieldState, setFieldState] = useState({});
+  const [fieldState, setFieldState] = useState({ reportModel: initialReportModel });
   const [form] = Form.useForm();
 
   const columnsWithOutReceipt = [
@@ -167,7 +167,7 @@ const List = (props) => {
     },
     {
       title: 'Card Scheme',
-      dataIndex: 'cardScheme',
+      dataIndex: 'CardScheme',
       align: 'left',
       render: (text, record) => {
         return (
@@ -187,7 +187,7 @@ const List = (props) => {
                   )}
                 </>
               )} */}
-            {record.cardScheme}
+            {record.CardScheme}
           </div>
         );
       },
@@ -223,7 +223,7 @@ const List = (props) => {
 
   const fetchMoreData = () => {
     const formData = {
-      // ...fieldState,
+      ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
@@ -232,7 +232,7 @@ const List = (props) => {
       pagination.pageNumber < Math.ceil(pagination.totalRecord / pagination.pageSize) &&
       transactionPagination?.current
     ) {
-      fetchTransactionListByCriteria(formData).then((response) => {
+      fetchTodayTransactionWithCriteria(formData).then((response) => {
         if (response.payload.message === 'SUCESS') {
           setPagination({
             ...pagination,
@@ -290,7 +290,7 @@ const List = (props) => {
                 filterFields={transactionFilterFields}
                 searchCriteria={() => {
                   setFieldState({});
-                  fetchAllTxnList();
+                  fetchTodayTxnList();
                 }}
               />
             </Form>
@@ -304,7 +304,7 @@ const List = (props) => {
           onClick={() => {
             form.resetFields();
             setFieldState({});
-            fetchAllTxnList();
+            fetchTodayTxnList();
           }}
           className="btn-custom-field mb-2 mt-n4"
           // icon="reload"
