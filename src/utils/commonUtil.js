@@ -100,18 +100,50 @@ export const hasPermission = (permissionCode, permissions) => {
   return permissions && permissions.includes(permissionCode);
 };
 
+// export const getFilterFieldValue = (reportModel) => {
+//   let fieldValue =
+//     reportModel &&
+//     reportModel.map((index, obj) => {
+//       let rObj = {};
+//       if (index.condition && index.field && (index.value || (index.fromDate && index.toDate))) {
+//         const value = index.value;
+//         const fromDate = moment(index.fromDate).format(SEARCH_DATE_FORMAT);
+//         const toDate = moment(index.toDate).format(SEARCH_DATE_FORMAT);
+//         const condition = index.condition;
+//         const field = index.field;
+//         const customizable = index.customizable;
+
+//         if (!value) {
+//           rObj.dateValue = toDate;
+//           rObj.value = fromDate;
+//         } else {
+//           if (moment.isMoment(value)) {
+//             rObj.value = moment(value).format(SEARCH_DATE_FORMAT);
+//           } else {
+//             rObj.value = value;
+//           }
+//         }
+
+//         rObj.condition = condition;
+//         rObj.field = field;
+//         rObj.customizable = customizable;
+//       }
+//       return rObj;
+//     });
+
+//   return fieldValue && fieldValue.filter(Boolean);
+// };
 export const getFilterFieldValue = (reportModel) => {
-  let fieldValue =
+  let filterFieldValues =
     reportModel &&
     reportModel.map((index, obj) => {
-      let rObj = {};
-      if (index.condition && index.field && (index.value || (index.fromDate && index.toDate))) {
+      if (index.condition && index.field && (index.value || index.fromDate)) {
+        var rObj = {};
+        let fromDate;
+        let toDate;
         const value = index.value;
-        const fromDate = moment(index.fromDate).format(SEARCH_DATE_FORMAT);
-        const toDate = moment(index.toDate).format(SEARCH_DATE_FORMAT);
-        const condition = index.condition;
-        const field = index.field;
-        const customizable = index.customizable;
+        fromDate = moment(index.fromDate).format(SEARCH_DATE_FORMAT);
+        toDate = moment(index.toDate).format(SEARCH_DATE_FORMAT);
 
         if (!value) {
           rObj.dateValue = toDate;
@@ -123,6 +155,9 @@ export const getFilterFieldValue = (reportModel) => {
             rObj.value = value;
           }
         }
+        const condition = index.condition;
+        const field = index.field;
+        const customizable = index.customizable;
 
         rObj.condition = condition;
         rObj.field = field;
@@ -131,7 +166,8 @@ export const getFilterFieldValue = (reportModel) => {
       return rObj;
     });
 
-  return fieldValue && fieldValue.filter(Boolean);
+  filterFieldValues = filterFieldValues?.filter(Boolean);
+  return filterFieldValues;
 };
 
 export const getSortingOrder = (sorterOrdered) => {

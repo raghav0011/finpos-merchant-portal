@@ -4,25 +4,26 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 const InfiniteTable = (props) => {
   const { columns, rowKey, dataSource, fetchMoreData, total, onChange, loading = false } = props;
+
   const [sorter, setSorter] = useState({});
 
   return (
     <>
       <InfiniteScroll
-        dataLength={dataSource?.length}
+        dataLength={dataSource.length}
         next={fetchMoreData}
-        hasMore={dataSource?.length !== total || loading}
+        hasMore={dataSource.length !== total || loading}
         // height={100}
         loader={
-          <div className={`text-center ${dataSource?.length > 0 ? 'pt-4' : 'pt-5'} pb-4`}>
+          <div className={`text-center ${dataSource.length > 0 ? 'pt-4' : 'pt-5'} pb-4`}>
             <Spin />
           </div>
         }
         endMessage={
           <div style={{ textAlign: 'center', borderBottom: 'black solid 1px' }} className="py-3">
-            {dataSource?.length > 0 && !loading
+            {dataSource.length > 0 && !loading
               ? 'No more data'
-              : dataSource?.length === 0
+              : dataSource.length === 0
               ? 'No data'
               : ''}
           </div>

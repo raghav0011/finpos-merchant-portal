@@ -5,9 +5,9 @@ import { fetch, store } from '../../../utils/httpUtil';
 export const fetchTodayTransactionWithCriteria = createAsyncThunk(
   'transaction/todaylist',
   (formData, { rejectWithValue }) => {
-    return store('v1/transactions', formData)
+    return store('v1/filter-transactions', formData)
       .then((response) => {
-        if (response.data.message === 'SUCESS') {
+        if (response.data.message === 'SUCCESS') {
           return response.data;
         } else {
           // TODO
@@ -20,9 +20,9 @@ export const fetchTodayTransactionWithCriteria = createAsyncThunk(
 export const fetchTransactionListByCriteria = createAsyncThunk(
   'transaction/list',
   (formData, { rejectWithValue }) => {
-    return store('v1/transactions', formData)
+    return store('v1/filter-transactions', formData)
       .then((response) => {
-        if (response.data.message === 'SUCESS') {
+        if (response.data.message === 'SUCCESS') {
           return response.data;
         } else {
           // TODO
@@ -36,7 +36,7 @@ export const fetchTransactionWatchListWithCriteria = createAsyncThunk(
   (formData, { rejectWithValue }) => {
     return store('v1/watchlist', formData)
       .then((response) => {
-        if (response.data.message === 'SUCESS') {
+        if (response.data.message === 'SUCCESS') {
           return response.data;
         } else {
           // TODO
@@ -65,6 +65,7 @@ export const transactionSlice = createSlice({
     loading: false,
     errors: {},
     pagination: {},
+    totalApprovedAmounts: [],
   },
   reducers: {
     cleanTransactionList(state) {
@@ -103,6 +104,7 @@ export const transactionSlice = createSlice({
             totalPage: action.payload.data.totalPage,
             showSizeChanger: true,
           };
+          state.totalApprovedAmounts = action.payload.data.totalApprovedAmounts;
         }
       )
       .addMatcher(
@@ -163,6 +165,7 @@ export const transactionSlice = createSlice({
             totalPage: action.payload.data.totalPage,
             showSizeChanger: true,
           };
+          state.totalApprovedAmounts = action.payload.data.totalApprovedAmounts;
         }
       );
   },
@@ -175,7 +178,6 @@ export const fetchTransactionFilterField = createAsyncThunk(
   (_, { rejectWithValue }) => {
     return fetch('v1/filter-fields/transactions')
       .then((response) => {
-        console.log('🚀 ~ file: transactionSlice.js ~ line 129 ~ .then ~ response', response);
         if (response.data.message === 'SUCCESS') {
           return response.data.data;
         } else {
