@@ -11,20 +11,20 @@ import { getFilterFieldValue } from '../../../utils/commonUtil';
 
 const List = (props) => {
   const {
-    // fetchAllTxnList,
+    fetchTodayTxnList,
+    initialReportModel,
     transactions,
     transactionLoading,
     transactionPagination,
-    fetchTransactionListByCriteria,
+    fetchTodayTransactionWithCriteria,
     pagination,
     setPagination,
-    fetchAllTxnList,
-    transactionFilterFields,
+    newFilterFields,
     totalApprovedAmounts,
     cleanTransactionList,
   } = props;
 
-  const [fieldState, setFieldState] = useState({});
+  const [fieldState, setFieldState] = useState({ reportModel: initialReportModel });
   const [form] = Form.useForm();
 
   const columnsWithOutReceipt = [
@@ -170,7 +170,7 @@ const List = (props) => {
     },
     {
       title: 'Card Scheme',
-      dataIndex: 'cardScheme',
+      dataIndex: 'CardScheme',
       align: 'left',
       render: (text, record) => {
         return (
@@ -190,7 +190,7 @@ const List = (props) => {
                   )}
                 </>
               )} */}
-            {record.cardScheme}
+            {record.CardScheme}
           </div>
         );
       },
@@ -226,7 +226,7 @@ const List = (props) => {
 
   const fetchMoreData = () => {
     const formData = {
-      // ...fieldState,
+      ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
@@ -235,7 +235,7 @@ const List = (props) => {
       pagination.pageNumber < Math.ceil(pagination.totalRecord / pagination.pageSize) &&
       transactionPagination?.current
     ) {
-      fetchTransactionListByCriteria(formData).then((response) => {
+      fetchTodayTransactionWithCriteria(formData).then((response) => {
         if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
@@ -258,7 +258,7 @@ const List = (props) => {
     formData.reportModel = getFilterFieldValue(values.searchKeys);
 
     setFieldState(formData);
-    fetchTransactionListByCriteria(formData).then((response) => {
+    fetchTodayTransactionWithCriteria(formData).then((response) => {
       if (response.payload.message === 'SUCCESS') {
         setPagination({
           ...pagination,
@@ -277,19 +277,19 @@ const List = (props) => {
             <Form
               form={form}
               onFinish={handleSearch}
+              initialValues={{ searchKeys: [''] }}
               className="search-form"
               hideRequiredMark
               layout="horizontal"
-              initialValues={{ searchKeys: [''] }}
             >
               <FilterField
                 moduleName="reportModel"
                 form={form}
                 {...props}
-                filterFields={transactionFilterFields}
+                filterFields={newFilterFields}
                 searchCriteria={() => {
                   setFieldState({});
-                  fetchAllTxnList();
+                  fetchTodayTxnList();
                 }}
               />
             </Form>
@@ -303,7 +303,7 @@ const List = (props) => {
           onClick={() => {
             form.resetFields();
             setFieldState({});
-            fetchAllTxnList();
+            fetchTodayTxnList();
           }}
           className="btn-custom-field mb-2 mt-n4"
           // icon="reload"

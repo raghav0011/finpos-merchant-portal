@@ -6,29 +6,27 @@ import {
   SearchOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
 
 import './index.css';
-import { exactMatchByKey } from '../../../utils/commonUtil';
-import { WButton } from '../Widgets';
+import { exactMatchByKey, isEmpty } from '../../../utils/commonUtil';
 
 const FormItem = Form.Item;
 const FormList = Form.List;
 const { Option } = Select;
 
 const DynamicField = (props) => {
-  const { t } = useTranslation();
-
   const {
     filterFields,
     searchCriteria,
     reportSearchParameter,
+    multiple = false,
     form: { resetFields, setFields },
   } = props;
 
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [condition, setCondition] = useState([]);
+
   const [dropdownOptions, setDropdownOptions] = useState([]);
 
   const resetFilterFields = () => {
@@ -39,6 +37,7 @@ const DynamicField = (props) => {
   const handleFieldNameChange = (value, k) => {
     if (value) {
       const conditionList = exactMatchByKey(value, filterFields, 'code');
+      const conditionValue = getDefaultCondition(conditionList);
 
       condition[`${k}`] = conditionList.conditions;
       setCondition(condition);
@@ -49,11 +48,7 @@ const DynamicField = (props) => {
       setFields([
         {
           name: ['searchKeys', [`${k}`], 'condition'],
-          value: undefined,
-        },
-        {
-          name: ['searchKeys', [`${k}`], 'value'],
-          value: undefined,
+          value: conditionValue,
         },
         {
           name: ['searchKeys', [`${k}`], 'customizable'],
@@ -81,7 +76,15 @@ const DynamicField = (props) => {
     return toDate.valueOf() <= fromDate.valueOf();
   };
 
-  const handleFromChange = (value) => {
+  const handleFromChange = (value, k) => {
+    if (value) {
+      setFields([
+        {
+          name: ['searchKeys', [`${k}`], 'toDate'],
+          value: undefined,
+        },
+      ]);
+    }
     setFromDate(value);
   };
 
@@ -89,261 +92,285 @@ const DynamicField = (props) => {
     setToDate(value);
   };
 
+  const getDefaultCondition = (fieldType) => {
+    switch (fieldType?.dataType?.toUpperCase()) {
+      case 'STRING':
+        return 'contains';
+      case 'DROPDOWN':
+        return 'eq';
+      case 'DATE':
+        return 'between';
+
+      default:
+        return '';
+    }
+  };
+  const formItemLayout = {
+    labelCol: {
+      xl: { span: 24 },
+      lg: { span: 24 },
+      md: { span: 24 },
+      sm: { span: 24 },
+      xs: { span: 24 },
+    },
+    wrapperCol: {
+      xl: { span: 24 },
+      lg: { span: 24 },
+      md: { span: 24 },
+      sm: { span: 24 },
+      xs: { span: 24 },
+    },
+    labelAlign: 'left',
+  };
+
   return (
     <FormList name="searchKeys">
       {(fields, { add, remove }) => {
         return (
-          <>
-            {fields.map((field, index) => (
-              <tr key={index}>
-                <FormItem
-                  {...field}
-                  fieldKey={[field.fieldKey, 'customizable']}
-                  name={[field.name, 'customizable']}
-                  noStyle
-                >
-                  <Input type="hidden" />
-                </FormItem>
-                <FormItem
-                  {...field}
-                  fieldKey={[field.fieldKey, 'dataType']}
-                  name={[field.name, 'dataType']}
-                  noStyle
-                >
-                  <Input type="hidden" />
-                </FormItem>
-                <td>
+          <Row>
+            <Col xxl={16} xl={12} lg={12} md={24} sm={24}>
+              {fields.map((field, index) => (
+                <div key={index} style={{ display: 'flex' }}>
                   <FormItem
                     {...field}
-                    fieldKey={[field.fieldKey, 'field']}
-                    name={[field.name, 'field']}
+                    fieldKey={[field.fieldKey, 'customizable']}
+                    name={[field.name, 'customizable']}
+                    noStyle
+                    hidden={true}
+                  >
+                    <Input type="hidden" />
+                  </FormItem>
+
+                  <FormItem
+                    {...field}
+                    fieldKey={[field.fieldKey, 'dataType']}
+                    name={[field.name, 'dataType']}
+                    noStyle
+                    hidden={true}
+                  >
+                    <Input type="hidden" />
+                  </FormItem>
+
+                  <Col xxl={11} xl={11} lg={12} md={12} sm={12} xs={12} className="mr-1">
+                    <FormItem
+                      {...field}
+                      {...formItemLayout}
+                      label={index === 0 ? `Fields` : ' '}
+                      fieldKey={[field.fieldKey, 'field']}
+                      name={[field.name, 'field']}
+                      className="filter-field-dropdown"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please select from the dropdown.',
+                        },
+                      ]}
+                    >
+                      <Select
+                        onChange={(value) => handleFieldNameChange(value, index)}
+                        showSearch
+                        optionFilterProp="children"
+                      >
+                        {filterFields &&
+                          filterFields.map((d) => <Option key={d.code}>{d.title}</Option>)}
+                      </Select>
+                    </FormItem>
+                  </Col>
+
+                  <FormItem
+                    {...field}
+                    fieldKey={[field.fieldKey, 'condition']}
+                    name={[field.name, 'condition']}
                     className="filter-field-dropdown"
                     rules={[
                       {
                         required: true,
-                        message: t('filter.field.dropdown.required.message'),
+                        message: 'Please select from the dropdown.',
                       },
                     ]}
+                    hidden={true}
                   >
-                    <Select
-                      placeholder={t('filter.field.fields.placeholder')}
-                      onChange={(value) => handleFieldNameChange(value, index)}
-                      showSearch
-                      optionFilterProp="children"
-                    >
-                      {filterFields &&
-                        filterFields.map((d) => <Option key={d.code}>{d.title}</Option>)}
-                    </Select>
+                    <Input type="hidden" />
+                    {/* </FormItem>
+                    )} */}
                   </FormItem>
-                </td>
-                <FormItem
-                  noStyle
-                  shouldUpdate={(prevValues, currentValues) =>
-                    prevValues?.searchKeys?.[`${index}`]?.['field'] !==
-                    currentValues?.searchKeys?.[`${index}`]?.['field']
-                  }
-                >
-                  {() => (
-                    <td>
-                      <FormItem
-                        {...field}
-                        fieldKey={[field.fieldKey, 'condition']}
-                        name={[field.name, 'condition']}
-                        className="filter-field-dropdown"
-                        rules={[
-                          {
-                            required: true,
-                            message: t('filter.field.dropdown.required.message'),
-                          },
-                        ]}
-                      >
-                        <Select
-                          showSearch
-                          placeholder={t('filter.field.condition.placeholder')}
-                          optionFilterProp="children"
-                        >
-                          {condition &&
-                            condition[`${index}`] &&
-                            condition[`${index}`].map((d) => (
-                              <Option key={d.code}>{d.title}</Option>
-                            ))}
-                        </Select>
-                      </FormItem>
-                    </td>
-                  )}
-                </FormItem>
-                <FormItem
-                  noStyle
-                  shouldUpdate={(prevValues, currentValues) =>
-                    prevValues?.searchKeys?.[`${index}`]?.['condition'] !==
-                      currentValues?.searchKeys?.[`${index}`]?.['condition'] ||
-                    prevValues?.searchKeys?.[`${index}`]?.['field'] !==
-                      currentValues?.searchKeys?.[`${index}`]?.['field']
-                  }
-                >
-                  {({ getFieldValue }) =>
-                    getFieldValue(`searchKeys`)?.[`${index}`]?.['condition'] === 'between' ? (
-                      <td>
-                        <div>
+
+                  <Col xxl={11} xl={11} lg={12} md={12} sm={12} xs={12}>
+                    <FormItem
+                      {...formItemLayout}
+                      shouldUpdate={(prevValues, currentValues) =>
+                        // prevValues?.searchKeys?.[`${index}`]?.['condition'] !==
+                        //   currentValues?.searchKeys?.[`${index}`]?.['condition'] ||
+                        prevValues?.searchKeys?.[`${index}`]?.['field'] !==
+                        currentValues?.searchKeys?.[`${index}`]?.['field']
+                      }
+                    >
+                      {({ getFieldValue }) =>
+                        getFieldValue(`searchKeys`)?.[`${index}`]?.['condition'] === 'between' ? (
                           <div
-                            style={{
-                              display: 'table-cell',
-                              width: '37%',
-                            }}
+                            style={
+                              index !== 0
+                                ? {
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    marginTop: '30px',
+                                  }
+                                : { display: 'flex', flexDirection: 'row' }
+                            }
                           >
                             <FormItem
                               {...field}
+                              {...formItemLayout}
+                              label={index === 0 ? 'Start Date' : ''}
                               name={[field.name, 'fromDate']}
                               fieldKey={[field.fieldKey, 'fromDate']}
                               rules={[
                                 {
                                   required: true,
-                                  message: t('filter.field.date.required.message'),
+                                  message: 'Please select date.',
                                 },
                               ]}
+                              style={{ width: '100%' }}
                             >
                               <DatePicker
-                                style={{ width: '100%' }}
-                                className="from-btn"
-                                format="MM-DD-YYYY"
+                                className="fromDate"
+                                format="YYYY-MM-DD"
                                 disableDate={disabledFromDate}
-                                onChange={handleFromChange}
-                                placeholder={t('filter.from.date.placeholder')}
+                                onChange={(value) => handleFromChange(value, index)}
+                                placeholder={'From Date'}
                               />
                             </FormItem>
-                          </div>
-                          <div
-                            style={{ display: 'table-cell', paddingLeft: '0.3rem', width: '37%' }}
-                          >
+
                             <FormItem
                               {...field}
+                              {...formItemLayout}
+                              label={index === 0 ? 'End Date' : ''}
                               name={[field.name, 'toDate']}
                               fieldKey={[field.fieldKey, 'toDate']}
                               rules={[
                                 {
                                   required: true,
-                                  message: t('filter.field.date.required.message'),
+                                  message: 'Please select date.',
                                 },
                               ]}
+                              style={{ width: '100%', marginLeft: '20px' }}
                             >
                               <DatePicker
-                                style={{ width: '100%' }}
-                                format="MM-DD-YYYY"
+                                format="YYYY-MM-DD"
                                 disabledDate={disabledToDate}
                                 onChange={handleToChange}
-                                placeholder={t('filter.to.date.placeholder')}
+                                placeholder={'To Date'}
                               />
                             </FormItem>
                           </div>
-                        </div>
-                      </td>
-                    ) : getFieldValue(`searchKeys`)?.[`${index}`]?.['dataType'] === 'dropdown' ? (
-                      <td>
-                        {' '}
-                        <FormItem
-                          {...field}
-                          name={[field.name, 'value']}
-                          fieldKey={[field.fieldKey, 'value']}
-                          rules={[
-                            {
-                              required: true,
-                              message: t('filter.field.dropdown.required.message'),
-                            },
-                          ]}
-                        >
-                          <Select
-                            showSearch
-                            placeholder={t('filter.field.select.value.label')}
-                            optionFilterProp="children"
+                        ) : getFieldValue(`searchKeys`)?.[`${index}`]?.['dataType'] ===
+                          'DropDown' ? (
+                          <FormItem
+                            {...field}
+                            {...formItemLayout}
+                            label={index === 0 ? 'Value' : ' '}
+                            name={[field.name, 'value']}
+                            fieldKey={[field.fieldKey, 'value']}
+                            rules={[
+                              {
+                                required: true,
+                                message: 'Please select from the dropdown.',
+                              },
+                            ]}
                           >
-                            {dropdownOptions &&
-                              dropdownOptions[`${index}`] &&
-                              dropdownOptions[`${index}`].map((d) => (
-                                <Option key={d.code}>{d.title}</Option>
-                              ))}
-                          </Select>
-                        </FormItem>
-                      </td>
-                    ) : getFieldValue(`searchKeys`)?.[`${index}`]?.['dataType'] === 'Date' ? (
-                      <td>
-                        <FormItem
-                          {...field}
-                          name={[field.name, 'value']}
-                          fieldKey={[field.fieldKey, 'value']}
-                          rules={[
-                            {
-                              required: true,
-                              message: t('filter.field.date.required.message'),
-                            },
-                          ]}
-                        >
-                          <DatePicker
-                            style={{ width: '100%' }}
-                            format="MM-DD-YYYY"
-                            placeholder={t('filter.field.select.date.label')}
-                          />
-                        </FormItem>
-                      </td>
-                    ) : (
-                      <td>
-                        <FormItem
-                          {...field}
-                          name={[field.name, 'value']}
-                          fieldKey={[field.fieldKey, 'value']}
-                          rules={[
-                            {
-                              required: true,
-                              message: t('filter.field.input.required.message'),
-                            },
-                          ]}
-                        >
-                          <Input type="text" placeholder={t('filter.field.value.label')} />
-                        </FormItem>
-                      </td>
-                    )
-                  }
-                </FormItem>
+                            <Select showSearch optionFilterProp="children">
+                              {dropdownOptions &&
+                                dropdownOptions[`${index}`] &&
+                                dropdownOptions[`${index}`].map((d) => (
+                                  <Option key={d.code}>{d.title}</Option>
+                                ))}
+                            </Select>
+                          </FormItem>
+                        ) : getFieldValue(`searchKeys`)?.[`${index}`]?.['dataType'] === 'Date' ? (
+                          <FormItem
+                            {...field}
+                            {...formItemLayout}
+                            name={[field.name, 'value']}
+                            label={index === 0 ? 'Value' : ' '}
+                            fieldKey={[field.fieldKey, 'value']}
+                            rules={[
+                              {
+                                required: true,
+                                message: 'Please select date.',
+                              },
+                            ]}
+                          >
+                            <DatePicker
+                              style={{ width: '100%' }}
+                              format="YYYY-MM-DD"
+                              placeholder={'Select Date'}
+                            />
+                          </FormItem>
+                        ) : (
+                          <FormItem
+                            {...field}
+                            {...formItemLayout}
+                            label={index === 0 ? 'Value' : ' '}
+                            name={[field.name, 'value']}
+                            fieldKey={[field.fieldKey, 'value']}
+                            rules={[
+                              {
+                                required: true,
+                                message: 'Please enter value.',
+                              },
+                            ]}
+                          >
+                            <Input type="text" />
+                          </FormItem>
+                        )
+                      }
+                    </FormItem>
+                  </Col>
 
-                {fields.length > 1 ? (
-                  <WButton
-                    style={{ border: '#ffffff', minWidth: 0 }}
-                    title="Remove"
-                    icon={<MinusCircleOutlined className="dynamic-delete-button" />}
-                    onClick={() => remove(field.name)}
-                  />
-                ) : null}
-              </tr>
-            ))}
-            <tr>
-              <td colSpan={2}>
-                <Row type="flex" justify="space-between" style={{ float: 'left' }}>
-                  <Col>
-                    <WButton customType="submit" htmlType="submit" icon={<SearchOutlined />}>
-                      {t('filter.search.button.label')}
-                    </WButton>
-                    <WButton
-                      customType="reset"
-                      className="ml-2"
-                      icon={<ReloadOutlined />}
-                      onClick={() => resetFilterFields()}
-                    >
-                      {t('filter.reset.button.label')}
-                    </WButton>
-                  </Col>
-                </Row>
-              </td>
-              <td>
-                <Row type="flex" justify="space-between" style={{ float: 'right' }}>
-                  <Col>
-                    <Button type="dashed" onClick={() => add()} className="btn-float-right">
-                      <PlusOutlined />
-                      {t('filter.add.condition.button.label')}
-                    </Button>
-                  </Col>
-                </Row>
-              </td>
-            </tr>
-          </>
+                  {fields.length > 1 ? (
+                    <Button
+                      style={{ border: '#ffffff', marginTop: '22px' }}
+                      title="Remove"
+                      icon={<MinusCircleOutlined className="dynamic-delete-button  mb-0 ml-2" />}
+                      onClick={() => remove(field.name)}
+                    />
+                  ) : null}
+                </div>
+              ))}
+            </Col>
+            <Col xxl={8} xl={12} lg={24} md={24} sm={24}>
+              <div className="d-flex transaction-btn justify-content-lg-end mt-4 ">
+                <Col>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    className="btn-float-right transaction-btn ml-sm-1"
+                  >
+                    <PlusOutlined />
+                    Add condition
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    className="ant-btn btn-custom-field ml-2"
+                    htmlType="submit"
+                    icon={<SearchOutlined />}
+                  >
+                    Search
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    className="ant-btn no-underline ml-2"
+                    icon={<ReloadOutlined />}
+                    onClick={() => resetFilterFields()}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </div>
+            </Col>
+          </Row>
         );
       }}
     </FormList>

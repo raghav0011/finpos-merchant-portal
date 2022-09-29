@@ -4,9 +4,11 @@ import { useHistory, useLocation } from 'react-router';
 
 import { TitleBar } from '../../shared/TitleBar';
 import AllTransaction from './AllTransactions';
-import ParkingList from './ParkingList';
+import WatchList from './WatchList';
+import TodayTransaction from './TodayTransaction';
 import QueueAnim from 'rc-queue-anim';
 import { PAGE_SIZE, PAGENUMBER } from '../../../constants/index';
+import moment from 'moment';
 
 const Tab = (props) => {
   const {
@@ -14,14 +16,19 @@ const Tab = (props) => {
     transactions,
     // transactionLoading,
     // transactionPagination,
-    // transactionFilterFields,
+    transactionFilterFields,
+    fetchTransactionFilterField,
     cleanTransactionList,
     fetchTransactionListByCriteria,
+    fetchTransactionWatchListWithCriteria,
+    fetchTodayTransactionWithCriteria,
   } = props;
 
   const history = useHistory();
   const { pathname, search } = useLocation();
   const [currentTabKey, setCurrentTabKey] = useState('todayTransactions');
+  const [newFilterFields, setNewFilterFields] = useState([]);
+  const [newWatchFilterFields, setWatchNewFilterFields] = useState([]);
   const [pagination, setPagination] = useState({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER });
 
   useEffect(() => {
@@ -32,6 +39,17 @@ const Tab = (props) => {
       // cleanTransactionFilterField();
     };
   }, []);
+  useEffect(() => {
+    setNewFilterFields(
+      transactionFilterFields?.filter((item) => item?.code?.toUpperCase() !== 'TRANSACTIONDATETIME')
+    );
+  }, [transactionFilterFields]);
+
+  useEffect(() => {
+    setWatchNewFilterFields(
+      transactionFilterFields?.filter((item) => item?.code?.toUpperCase() !== 'STATUS')
+    );
+  }, [transactionFilterFields]);
 
   const onChange = (e) => {
     cleanTransactionList();
@@ -42,11 +60,37 @@ const Tab = (props) => {
     return;
   };
 
+  const todayInitialReportModel = [
+    {
+      value: moment().format('MM-DD-YYYY'),
+      condition: 'dateEqual',
+      field: 'transactionDateTime',
+      customizable: false,
+    },
+  ];
+
+  const fetchTodayTxnList = () => {
+    cleanTransactionList();
+    fetchTodayTransactionWithCriteria({
+      pageNumber: PAGENUMBER,
+      pageSize: PAGE_SIZE,
+      reportModel: todayInitialReportModel,
+    }).then((response) => {
+      if (response.payload.message === 'SUCCESS') {
+        setPagination({
+          ...pagination,
+          pageNumber: response.payload.data.currentPage,
+          totalRecord: response.payload.data.totalRecord,
+        });
+      }
+    });
+  };
+
   const fetchAllTxnList = () => {
     cleanTransactionList();
     fetchTransactionListByCriteria({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER }).then(
       (response) => {
-        if (response.payload.message === 'SUCESS') {
+        if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
             pageNumber: response.payload.data.currentPage,
@@ -57,21 +101,38 @@ const Tab = (props) => {
     );
   };
 
+  const fetchWatchListTxnList = () => {
+    cleanTransactionList();
+    fetchTransactionWatchListWithCriteria({
+      pageSize: PAGE_SIZE,
+      pageNumber: PAGENUMBER,
+    }).then((response) => {
+      if (response.payload.message === 'SUCCESS') {
+        setPagination({
+          ...pagination,
+          pageNumber: response.payload.data.currentPage,
+          totalRecord: response.payload.data.totalRecord,
+        });
+      }
+    });
+  };
+
   const fetchCurrentTabList = (currentTab) => {
     cleanTransactionList();
     setPagination({ pageSize: PAGE_SIZE });
     switch (currentTab) {
       case 'todayTransactions':
-        // fetchAllTxnList();
-        // fetchTransactionFilterField();
+        fetchTransactionFilterField();
+        fetchTodayTxnList();
         break;
       case 'allTransaction':
         fetchAllTxnList();
+        fetchTransactionFilterField();
 
         break;
       case 'watchList':
-        // fetchWatchListTxnList();
-        // fetchTransactionWatchListFilterField();
+        fetchWatchListTxnList();
+        fetchTransactionFilterField();
         break;
 
         break;
@@ -96,8 +157,15 @@ const Tab = (props) => {
               tabBarStyle={{ background: '#ffffff', paddingLeft: '20px' }}
               tabBarGutter={70}
             >
-              <Tabs.TabPane tab={'Today Transaction'} key={'todayTransactions'}>
-                {/* <AllTransaction {...props} /> */}
+              <Tabs.TabPane tab={"Today's Transaction"} key={'todayTransactions'}>
+                <TodayTransaction
+                  pagination={pagination}
+                  setPagination={setPagination}
+                  fetchTodayTxnList={fetchTodayTxnList}
+                  initialReportModel={todayInitialReportModel}
+                  newFilterFields={newFilterFields}
+                  {...props}
+                />
               </Tabs.TabPane>
               <Tabs.TabPane tab={'All Transaction'} key={'allTransaction'}>
                 <AllTransaction
@@ -108,7 +176,13 @@ const Tab = (props) => {
                 />
               </Tabs.TabPane>
               <Tabs.TabPane tab={'Watch list'} key={'watchList'}>
-                {/* <ParkingList {...props} /> */}
+                <WatchList
+                  pagination={pagination}
+                  setPagination={setPagination}
+                  fetchWatchListTxnList={fetchWatchListTxnList}
+                  newWatchFilterFields={newWatchFilterFields}
+                  {...props}
+                />
               </Tabs.TabPane>
             </Tabs>
           </article>

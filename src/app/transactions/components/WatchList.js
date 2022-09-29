@@ -15,12 +15,11 @@ const List = (props) => {
     transactions,
     transactionLoading,
     transactionPagination,
-    fetchTransactionListByCriteria,
+    fetchTransactionWatchListWithCriteria,
     pagination,
     setPagination,
-    fetchAllTxnList,
-    transactionFilterFields,
-    totalApprovedAmounts,
+    fetchWatchListTxnList,
+    newWatchFilterFields,
     cleanTransactionList,
   } = props;
 
@@ -235,7 +234,7 @@ const List = (props) => {
       pagination.pageNumber < Math.ceil(pagination.totalRecord / pagination.pageSize) &&
       transactionPagination?.current
     ) {
-      fetchTransactionListByCriteria(formData).then((response) => {
+      fetchTransactionWatchListWithCriteria(formData).then((response) => {
         if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
@@ -258,7 +257,7 @@ const List = (props) => {
     formData.reportModel = getFilterFieldValue(values.searchKeys);
 
     setFieldState(formData);
-    fetchTransactionListByCriteria(formData).then((response) => {
+    fetchTransactionWatchListWithCriteria(formData).then((response) => {
       if (response.payload.message === 'SUCCESS') {
         setPagination({
           ...pagination,
@@ -277,19 +276,19 @@ const List = (props) => {
             <Form
               form={form}
               onFinish={handleSearch}
+              initialValues={{ searchKeys: [''] }}
               className="search-form"
               hideRequiredMark
               layout="horizontal"
-              initialValues={{ searchKeys: [''] }}
             >
               <FilterField
                 moduleName="reportModel"
                 form={form}
                 {...props}
-                filterFields={transactionFilterFields}
+                filterFields={newWatchFilterFields}
                 searchCriteria={() => {
                   setFieldState({});
-                  fetchAllTxnList();
+                  fetchWatchListTxnList();
                 }}
               />
             </Form>
@@ -303,42 +302,13 @@ const List = (props) => {
           onClick={() => {
             form.resetFields();
             setFieldState({});
-            fetchAllTxnList();
+            fetchWatchListTxnList();
           }}
           className="btn-custom-field mb-2 mt-n4"
           // icon="reload"
         >
           Refresh
         </Button>
-
-        <div className="d-flex justify-content-center">
-          <div className="px-2 bold">
-            Count :{' '}
-            <span style={{ fontWeight: 'normal' }}>
-              {pagination ? pagination.totalRecord : '-'}
-            </span>
-          </div>
-          <div className="px-2 bold">
-            Total :{' '}
-            {totalApprovedAmounts &&
-              totalApprovedAmounts.map((amount) => {
-                return (
-                  <span
-                    style={{
-                      fontWeight: 'normal',
-                      border: '1px solid #CCC',
-                      padding: '5px',
-                      marginRight: '2px',
-                      borderRadius: '10px',
-                    }}
-                  >
-                    {amount ? `${amount.currency_code} ${amount.sum} ` : '-'}
-                  </span>
-                );
-              })}
-          </div>
-        </div>
-        <div></div>
       </div>
 
       <div className="box box-default box-ant-table-v1">
