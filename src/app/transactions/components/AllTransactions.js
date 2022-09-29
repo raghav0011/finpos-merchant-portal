@@ -7,6 +7,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import { DATE_FORMAT } from '../../../constants';
 import moment from 'moment';
 import { Card, Form, Button, Icon, Tooltip, Upload, Col } from 'antd';
+import { getFilterFieldValue } from '../../../utils/commonUtil';
 
 const List = (props) => {
   const {
@@ -19,6 +20,8 @@ const List = (props) => {
     setPagination,
     fetchAllTxnList,
     transactionFilterFields,
+    totalApprovedAmounts,
+    cleanTransactionList,
   } = props;
 
   const [fieldState, setFieldState] = useState({});
@@ -233,7 +236,7 @@ const List = (props) => {
       transactionPagination?.current
     ) {
       fetchTransactionListByCriteria(formData).then((response) => {
-        if (response.payload.message === 'SUCESS') {
+        if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
             pageNumber: response.payload.data.currentPage,
@@ -244,32 +247,27 @@ const List = (props) => {
     }
   };
 
-  // const handleSearch = e => {
-  //   e.preventDefault();
-  //   validateFields((err, values) => {
-  //     if (!err) {
-  //       cleanTransaction();
-  //       const formData = {};
+  const handleSearch = (values) => {
+    cleanTransactionList();
+    const formData = {};
 
-  //       formData.pageNumber = 1;
-  //       formData.pageSize = pagination.pageSize;
-  //       formData.sortField = pagination.sortField;
-  //       formData.sortOrder = pagination.sortOrder;
-  //       formData.reportModel = getFilterFieldValue(values.reportModel);
-  //       setFieldState(formData);
-  //       // fetchTransactionWithCriteria(formData);
-  //       fetchTransactionWithCriteria(formData).then(response => {
-  //         if (response.data.message === 'SUCCESS') {
-  //           setPagination({
-  //             ...pagination,
-  //             pageNumber: response.data.data.currentPage,
-  //             totalRecord: response.data.data.totalRecord,
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
+    formData.pageNumber = 1;
+    formData.pageSize = pagination.pageSize;
+    // formData.sortField = pagination.sortField;
+    // formData.sortOrder = pagination.sortOrder;
+    formData.reportModel = getFilterFieldValue(values.searchKeys);
+
+    setFieldState(formData);
+    fetchTransactionListByCriteria(formData).then((response) => {
+      if (response.payload.message === 'SUCCESS') {
+        setPagination({
+          ...pagination,
+          pageNumber: response.payload.data.currentPage,
+          totalRecord: response.payload.data.totalRecord,
+        });
+      }
+    });
+  };
 
   return (
     <>
@@ -277,11 +275,12 @@ const List = (props) => {
         <div className="col-12">
           <Card className="card " bordered={false}>
             <Form
-              // onFinish={handleSearch}
-              initialValues={{ searchKeys: [''] }}
+              form={form}
+              onFinish={handleSearch}
               className="search-form"
               hideRequiredMark
               layout="horizontal"
+              initialValues={{ searchKeys: [''] }}
             >
               <FilterField
                 moduleName="reportModel"
@@ -316,13 +315,13 @@ const List = (props) => {
           <div className="px-2 bold">
             Count :{' '}
             <span style={{ fontWeight: 'normal' }}>
-              {/* {transactionsCount ? internationalFormattedNumber(transactionsCount) : '-'} */}
+              {pagination ? pagination.totalRecord : '-'}
             </span>
           </div>
           <div className="px-2 bold">
             Total :{' '}
-            {/* {transactionsAmount &&
-              transactionsAmount.map(amount => {
+            {totalApprovedAmounts &&
+              totalApprovedAmounts.map((amount) => {
                 return (
                   <span
                     style={{
@@ -333,12 +332,10 @@ const List = (props) => {
                       borderRadius: '10px',
                     }}
                   >
-                    {amount
-                      ? `${amount.currencyCode} ${internationalFormattedAmount(amount.amount)} `
-                      : '-'}
+                    {amount ? `${amount.currency_code} ${amount.sum} ` : '-'}
                   </span>
                 );
-              })} */}
+              })}
           </div>
         </div>
         <div></div>

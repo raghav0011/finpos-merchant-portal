@@ -12,6 +12,7 @@ const TransactionListContainer = (props) => {
   const transactionErrors = useSelector((state) => state.transactions.errors);
   const transactionPagination = useSelector((state) => state.transactions.pagination);
   const transactionFilterFields = useSelector((state) => state.transactionFilterField.payload);
+  const totalApprovedAmounts = useSelector((state) => state.transactions.totalApprovedAmounts);
 
   /**
    * Fetch role filter field records.
@@ -69,6 +70,7 @@ const TransactionListContainer = (props) => {
     fetchTransactionFilterField,
     transactionFilterFields,
     fetchTodayTransactionWithCriteria,
+    totalApprovedAmounts,
   };
   return <Tabs {...props} />;
 };

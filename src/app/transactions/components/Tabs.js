@@ -27,6 +27,8 @@ const Tab = (props) => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   const [currentTabKey, setCurrentTabKey] = useState('todayTransactions');
+  const [newFilterFields, setNewFilterFields] = useState([]);
+  const [newWatchFilterFields, setWatchNewFilterFields] = useState([]);
   const [pagination, setPagination] = useState({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER });
 
   useEffect(() => {
@@ -37,6 +39,17 @@ const Tab = (props) => {
       // cleanTransactionFilterField();
     };
   }, []);
+  useEffect(() => {
+    setNewFilterFields(
+      transactionFilterFields?.filter((item) => item?.code?.toUpperCase() !== 'TRANSACTIONDATETIME')
+    );
+  }, [transactionFilterFields]);
+
+  useEffect(() => {
+    setWatchNewFilterFields(
+      transactionFilterFields?.filter((item) => item?.code?.toUpperCase() !== 'STATUS')
+    );
+  }, [transactionFilterFields]);
 
   const onChange = (e) => {
     cleanTransactionList();
@@ -63,11 +76,11 @@ const Tab = (props) => {
       pageSize: PAGE_SIZE,
       reportModel: todayInitialReportModel,
     }).then((response) => {
-      if (response.payload.message === 'SUCESS') {
+      if (response.payload.message === 'SUCCESS') {
         setPagination({
           ...pagination,
-          pageNumber: response?.payload?.data?.currentPage,
-          totalRecord: response?.payload?.data?.totalRecord,
+          pageNumber: response.payload.data.currentPage,
+          totalRecord: response.payload.data.totalRecord,
         });
       }
     });
@@ -77,7 +90,7 @@ const Tab = (props) => {
     cleanTransactionList();
     fetchTransactionListByCriteria({ pageSize: PAGE_SIZE, pageNumber: PAGENUMBER }).then(
       (response) => {
-        if (response.payload.message === 'SUCESS') {
+        if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
             pageNumber: response.payload.data.currentPage,
@@ -150,6 +163,7 @@ const Tab = (props) => {
                   setPagination={setPagination}
                   fetchTodayTxnList={fetchTodayTxnList}
                   initialReportModel={todayInitialReportModel}
+                  newFilterFields={newFilterFields}
                   {...props}
                 />
               </Tabs.TabPane>
@@ -166,6 +180,7 @@ const Tab = (props) => {
                   pagination={pagination}
                   setPagination={setPagination}
                   fetchWatchListTxnList={fetchWatchListTxnList}
+                  newWatchFilterFields={newWatchFilterFields}
                   {...props}
                 />
               </Tabs.TabPane>

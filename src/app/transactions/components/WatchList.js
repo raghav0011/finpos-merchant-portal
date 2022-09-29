@@ -7,6 +7,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import { DATE_FORMAT } from '../../../constants';
 import moment from 'moment';
 import { Card, Form, Button, Icon, Tooltip, Upload, Col } from 'antd';
+import { getFilterFieldValue } from '../../../utils/commonUtil';
 
 const List = (props) => {
   const {
@@ -18,7 +19,8 @@ const List = (props) => {
     pagination,
     setPagination,
     fetchWatchListTxnList,
-    transactionFilterFields,
+    newWatchFilterFields,
+    cleanTransactionList,
   } = props;
 
   const [fieldState, setFieldState] = useState({});
@@ -223,7 +225,7 @@ const List = (props) => {
 
   const fetchMoreData = () => {
     const formData = {
-      ...fieldState,
+      // ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
@@ -233,7 +235,7 @@ const List = (props) => {
       transactionPagination?.current
     ) {
       fetchTransactionWatchListWithCriteria(formData).then((response) => {
-        if (response.payload.message === 'SUCESS') {
+        if (response.payload.message === 'SUCCESS') {
           setPagination({
             ...pagination,
             pageNumber: response.payload.data.currentPage,
@@ -244,32 +246,27 @@ const List = (props) => {
     }
   };
 
-  // const handleSearch = e => {
-  //   e.preventDefault();
-  //   validateFields((err, values) => {
-  //     if (!err) {
-  //       cleanTransaction();
-  //       const formData = {};
+  const handleSearch = (values) => {
+    cleanTransactionList();
+    const formData = {};
 
-  //       formData.pageNumber = 1;
-  //       formData.pageSize = pagination.pageSize;
-  //       formData.sortField = pagination.sortField;
-  //       formData.sortOrder = pagination.sortOrder;
-  //       formData.reportModel = getFilterFieldValue(values.reportModel);
-  //       setFieldState(formData);
-  //       // fetchTransactionWithCriteria(formData);
-  //       fetchTransactionWithCriteria(formData).then(response => {
-  //         if (response.data.message === 'SUCCESS') {
-  //           setPagination({
-  //             ...pagination,
-  //             pageNumber: response.data.data.currentPage,
-  //             totalRecord: response.data.data.totalRecord,
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
+    formData.pageNumber = 1;
+    formData.pageSize = pagination.pageSize;
+    // formData.sortField = pagination.sortField;
+    // formData.sortOrder = pagination.sortOrder;
+    formData.reportModel = getFilterFieldValue(values.searchKeys);
+
+    setFieldState(formData);
+    fetchTransactionWatchListWithCriteria(formData).then((response) => {
+      if (response.payload.message === 'SUCCESS') {
+        setPagination({
+          ...pagination,
+          pageNumber: response.payload.data.currentPage,
+          totalRecord: response.payload.data.totalRecord,
+        });
+      }
+    });
+  };
 
   return (
     <>
@@ -277,7 +274,8 @@ const List = (props) => {
         <div className="col-12">
           <Card className="card " bordered={false}>
             <Form
-              // onFinish={handleSearch}
+              form={form}
+              onFinish={handleSearch}
               initialValues={{ searchKeys: [''] }}
               className="search-form"
               hideRequiredMark
@@ -287,7 +285,7 @@ const List = (props) => {
                 moduleName="reportModel"
                 form={form}
                 {...props}
-                filterFields={transactionFilterFields}
+                filterFields={newWatchFilterFields}
                 searchCriteria={() => {
                   setFieldState({});
                   fetchWatchListTxnList();
