@@ -35,7 +35,7 @@ const LoginForm = () => {
                   name="userId"
                   rules={[
                     { required: true, message: 'Please input your username' },
-                    { type: 'email', message: 'Please input valid username' },
+                    // { type: 'email', message: 'Please input valid username' },
                   ]}
                 >
                   <Input
