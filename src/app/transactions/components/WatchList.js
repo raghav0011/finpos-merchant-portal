@@ -45,15 +45,7 @@ const List = (props) => {
         return <div>{record.transactionType}</div>;
       },
     },
-    {
-      title: 'Approval Code',
-      dataIndex: 'approvalCode',
-      align: 'left',
-      // sorter: true,
-      render: (text, record) => {
-        return <div>{record.approvalCode}</div>;
-      },
-    },
+
     {
       title: 'Currency Code',
       dataIndex: 'currencyCode',

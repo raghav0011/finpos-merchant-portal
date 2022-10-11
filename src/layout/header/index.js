@@ -114,7 +114,7 @@ const AppHeader = (props) => {
               placement="bottomRight"
             >
               <span style={{ cursor: 'pointer' }}>
-                <Avatar src={'/assets/avatars/6.png'} size="small" />
+                <Avatar src={process.env.PUBLIC_URL + '/assets/avatars/6.png'} size="small" />
                 <span className="avatar-text d-none d-md-inline">{uiHeaderData?.fullName}</span>
               </span>
             </Dropdown>
