@@ -34,8 +34,8 @@ export const httpBase = (isDownloadable = false) => {
 
   api.interceptors.response.use(
     (response) => {
-      if (response.headers && response.headers['x-xsrf-token']) {
-        setLocalStorage(JWT_TOKEN, response.headers['x-xsrf-token']);
+      if (response.headers && response.headers['X-XSRF-TOKEN']) {
+        setLocalStorage(JWT_TOKEN, response.headers['X-XSRF-TOKEN']);
       }
       return response;
     },
@@ -46,7 +46,7 @@ export const httpBase = (isDownloadable = false) => {
           {},
           {
             headers: {
-              Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
+              Authorization: `${getLocalStorage(JWT_TOKEN)}`,
             },
           }
         );
