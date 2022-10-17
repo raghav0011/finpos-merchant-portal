@@ -222,6 +222,30 @@ const List = (props) => {
         return <div>{record.settlementStatus}</div>;
       },
     },
+    {
+      title: 'Receipt',
+      dataIndex: 'receipt',
+      align: 'left',
+      // sorter: true,
+      // fixed: 'right',
+      // width: 100,
+      render: (text, record, index) => {
+        return (
+          <Button
+            type="primary"
+            key={index}
+            // className="btn-custom-field m-1"
+            size="small"
+            onClick={() => {
+              // handleModalChange(record.id);
+            }}
+            ghost
+          >
+            Generate
+          </Button>
+        );
+      },
+    },
   ];
 
   const fetchMoreData = () => {
