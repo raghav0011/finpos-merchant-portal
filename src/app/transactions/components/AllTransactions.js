@@ -8,6 +8,9 @@ import { DATE_FORMAT } from '../../../constants';
 import moment from 'moment';
 import { Card, Form, Button, Icon, Tooltip, Upload, Col } from 'antd';
 import { getFilterFieldValue } from '../../../utils/commonUtil';
+import { fetchDownloadMerchantReceipt } from '../slice/transactionApi';
+import useModalHook from '../../shared/Hooks/modalHook';
+import ImageModal from '../../shared/ModelBox/DownloadModal';
 
 const List = (props) => {
   const {
@@ -26,6 +29,28 @@ const List = (props) => {
 
   const [fieldState, setFieldState] = useState({});
   const [form] = Form.useForm();
+  const [modalVisible, showModal, hideModal] = useModalHook();
+  const [imageSrc, setImageSrc] = useState('');
+
+  const handleModalChange = (id) => {
+    // console.log('e.target.value');
+    // api call here....
+    fetchDownloadMerchantReceipt(id).then((response) => {
+      if (response === undefined) {
+      } else {
+        showModal();
+        const url = window.URL.createObjectURL(response.data);
+        setImageSrc(url);
+      }
+    });
+  };
+
+  const imageModalProps = {
+    modalVisible,
+    // title: 'Banner',
+    hideModal,
+    imageSrc,
+  };
 
   const columnsWithOutReceipt = [
     {
@@ -222,11 +247,35 @@ const List = (props) => {
         return <div>{record.settlementStatus}</div>;
       },
     },
+    {
+      title: 'Receipt',
+      dataIndex: 'receipt',
+      align: 'left',
+      // sorter: true,
+      // fixed: 'right',
+      // width: 100,
+      render: (text, record, index) => {
+        return (
+          <Button
+            type="primary"
+            key={index}
+            // className="btn-custom-field m-1"
+            size="small"
+            onClick={() => {
+              handleModalChange(record.id);
+            }}
+            ghost
+          >
+            Generate
+          </Button>
+        );
+      },
+    },
   ];
 
   const fetchMoreData = () => {
     const formData = {
-      // ...fieldState,
+      ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
@@ -352,6 +401,7 @@ const List = (props) => {
           />
         </div>
       </div>
+      <ImageModal {...imageModalProps} />
     </>
   );
 };

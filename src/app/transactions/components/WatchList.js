@@ -217,7 +217,7 @@ const List = (props) => {
 
   const fetchMoreData = () => {
     const formData = {
-      // ...fieldState,
+      ...fieldState,
       pageNumber: transactionPagination.current + 1 || 1,
       pageSize: pagination.pageSize,
     };
