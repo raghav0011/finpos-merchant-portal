@@ -279,8 +279,7 @@ const List = (props) => {
     formData.pageSize = pagination.pageSize;
     // formData.sortField = pagination.sortField;
     // formData.sortOrder = pagination.sortOrder;
-    formData.reportModel = getFilterFieldValue(values.searchKeys);
-
+    formData.reportModel = [...initialReportModel, ...getFilterFieldValue(values.searchKeys)];
     setFieldState(formData);
     fetchTodayTransactionWithCriteria(formData).then((response) => {
       if (response.payload.message === 'SUCCESS') {
@@ -312,7 +311,7 @@ const List = (props) => {
                 {...props}
                 filterFields={newFilterFields}
                 searchCriteria={() => {
-                  setFieldState({});
+                  setFieldState({ reportModel: initialReportModel });
                   fetchTodayTxnList();
                 }}
               />
