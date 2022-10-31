@@ -6,7 +6,7 @@ import {
   SearchOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
-
+import moment from 'moment';
 import './index.css';
 import { exactMatchByKey, isEmpty } from '../../../utils/commonUtil';
 
@@ -20,17 +20,22 @@ const DynamicField = (props) => {
     searchCriteria,
     reportSearchParameter,
     multiple = false,
+    disableFuture = true,
     form: { resetFields, setFields },
   } = props;
 
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
+  const [fromDate, setFromDate] = useState({});
+
+  const [toDate, setToDate] = useState({});
+
   const [condition, setCondition] = useState([]);
 
   const [dropdownOptions, setDropdownOptions] = useState([]);
 
   const resetFilterFields = () => {
     resetFields();
+    setFromDate({});
+    setToDate({});
     reportSearchParameter ? searchCriteria(reportSearchParameter) : searchCriteria();
   };
 
@@ -62,34 +67,41 @@ const DynamicField = (props) => {
     }
   };
 
-  const disabledFromDate = (fromDate) => {
-    if (!fromDate || !toDate) {
+  const disabledFromDate = (fromDate, index) => {
+    if (!fromDate || !toDate?.[index]) {
+      // disable future dates even when toDate is undefined
+      if (disableFuture) {
+        return fromDate.format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD');
+      }
       return false;
     }
-    return fromDate.valueOf() > toDate.valueOf();
+
+    return fromDate.format('YYYY-MM-DD') >= toDate?.[index].format('YYYY-MM-DD');
   };
 
-  const disabledToDate = (toDate) => {
-    if (!toDate || !fromDate) {
+  const disabledToDate = (toDate, index) => {
+    if (!toDate || !fromDate?.[index]) {
+      // disable future dates even when fromDate is undefined
+      if (disableFuture) {
+        return toDate.valueOf() >= moment().valueOf();
+      }
       return false;
     }
-    return toDate.valueOf() <= fromDate.valueOf();
+    if (disableFuture) {
+      // disable future dates and dates before fromDate.
+      return (
+        toDate.format('YYYY-MM-DD') <= fromDate?.[index].format('YYYY-MM-DD') ||
+        toDate.format('YYYY-MM-DD') > moment().format('YYYY-MM-DD')
+      );
+    }
+    return toDate.valueOf() < fromDate?.[index].valueOf();
   };
-
   const handleFromChange = (value, k) => {
-    if (value) {
-      setFields([
-        {
-          name: ['searchKeys', [`${k}`], 'toDate'],
-          value: undefined,
-        },
-      ]);
-    }
-    setFromDate(value);
+    setFromDate({ ...fromDate, [k]: value });
   };
 
-  const handleToChange = (value) => {
-    setToDate(value);
+  const handleToChange = (value, k) => {
+    setToDate({ ...toDate, [k]: value });
   };
 
   const getDefaultCondition = (fieldType) => {
@@ -234,8 +246,8 @@ const DynamicField = (props) => {
                             >
                               <DatePicker
                                 className="fromDate"
-                                format="YYYY-MM-DD"
-                                disableDate={disabledFromDate}
+                                format="MM-DD-YYYY"
+                                disabledDate={(date) => disabledFromDate(date, index)}
                                 onChange={(value) => handleFromChange(value, index)}
                                 placeholder={'From Date'}
                               />
@@ -256,9 +268,9 @@ const DynamicField = (props) => {
                               style={{ width: '100%', marginLeft: '20px' }}
                             >
                               <DatePicker
-                                format="YYYY-MM-DD"
-                                disabledDate={disabledToDate}
-                                onChange={handleToChange}
+                                format="MM-DD-YYYY"
+                                disabledDate={(date) => disabledToDate(date, index)}
+                                onChange={(value) => handleToChange(value, index)}
                                 placeholder={'To Date'}
                               />
                             </FormItem>

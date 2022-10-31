@@ -14,18 +14,17 @@ import {
 } from '../constants';
 import { getLocalStorage, setLocalStorage, clearLocalStorage } from './storageUtil';
 
-const normalHeaders = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-  'X-XSRF-TOKEN': `${getLocalStorage(JWT_TOKEN)}`,
-};
-const downloadableHeaders = {
-  Accept: '*/*',
-  'Content-Type': 'application/json',
-  'X-XSRF-TOKEN': `${getLocalStorage(JWT_TOKEN)}`,
-};
-
 export const httpBase = (isDownloadable = false) => {
+  const normalHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'X-XSRF-TOKEN': getLocalStorage(JWT_TOKEN),
+  };
+  const downloadableHeaders = {
+    Accept: '*/*',
+    'Content-Type': 'application/json',
+    'X-XSRF-TOKEN': getLocalStorage(JWT_TOKEN),
+  };
   const api = axios.create({
     baseURL: `${API_URL}`,
     headers: isDownloadable ? downloadableHeaders : normalHeaders,
@@ -34,22 +33,22 @@ export const httpBase = (isDownloadable = false) => {
 
   api.interceptors.response.use(
     (response) => {
-      if (response.headers && response.headers['X-XSRF-TOKEN']) {
-        setLocalStorage(JWT_TOKEN, response.headers['X-XSRF-TOKEN']);
+      if (response.headers && response.headers['x-xsrf-token']) {
+        setLocalStorage(JWT_TOKEN, response.headers['x-xsrf-token']);
       }
       return response;
     },
     (error) => {
       if (401 === error.response.status) {
-        axios.post(
-          API_URL + '/config/v1/auths/logout',
-          {},
-          {
-            headers: {
-              Authorization: `${getLocalStorage(JWT_TOKEN)}`,
-            },
-          }
-        );
+        // axios.post(
+        //   API_URL + '/config/v1/auths/logout',
+        //   {},
+        //   {
+        //     headers: {
+        //       Authorization: getLocalStorage(JWT_TOKEN),
+        //     },
+        //   }
+        // );
         clearLocalStorage(JWT_TOKEN);
         clearLocalStorage(PERMISSION_KEY);
         clearLocalStorage(USER_FULL_NAME);
