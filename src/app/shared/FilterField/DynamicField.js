@@ -71,12 +71,12 @@ const DynamicField = (props) => {
     if (!fromDate || !toDate?.[index]) {
       // disable future dates even when toDate is undefined
       if (disableFuture) {
-        return fromDate.format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD');
+        return fromDate.format('YYYY-MM-DD') > moment().format('YYYY-MM-DD');
       }
       return false;
     }
 
-    return fromDate.format('YYYY-MM-DD') >= toDate?.[index].format('YYYY-MM-DD');
+    return fromDate.format('YYYY-MM-DD') > toDate?.[index].format('YYYY-MM-DD');
   };
 
   const disabledToDate = (toDate, index) => {
@@ -90,7 +90,7 @@ const DynamicField = (props) => {
     if (disableFuture) {
       // disable future dates and dates before fromDate.
       return (
-        toDate.format('YYYY-MM-DD') <= fromDate?.[index].format('YYYY-MM-DD') ||
+        toDate.format('YYYY-MM-DD') < fromDate?.[index].format('YYYY-MM-DD') ||
         toDate.format('YYYY-MM-DD') > moment().format('YYYY-MM-DD')
       );
     }
@@ -132,7 +132,7 @@ const DynamicField = (props) => {
       sm: { span: 24 },
       xs: { span: 24 },
     },
-    labelAlign: 'left',
+    // labelAlign: 'left',
   };
 
   return (
@@ -140,7 +140,7 @@ const DynamicField = (props) => {
       {(fields, { add, remove }) => {
         return (
           <Row>
-            <Col xxl={16} xl={12} lg={12} md={24} sm={24}>
+            <Col xxl={16} xl={12} lg={24} md={24} sm={24}>
               {fields.map((field, index) => (
                 <div key={index} style={{ display: 'flex' }}>
                   <FormItem
@@ -207,9 +207,9 @@ const DynamicField = (props) => {
                     )} */}
                   </FormItem>
 
-                  <Col xxl={11} xl={11} lg={12} md={12} sm={12} xs={12}>
+                  <Col xxl={11} xl={11} lg={11} md={12} sm={12} xs={12}>
                     <FormItem
-                      {...formItemLayout}
+                      noStyle
                       shouldUpdate={(prevValues, currentValues) =>
                         // prevValues?.searchKeys?.[`${index}`]?.['condition'] !==
                         //   currentValues?.searchKeys?.[`${index}`]?.['condition'] ||
@@ -242,10 +242,11 @@ const DynamicField = (props) => {
                                   message: 'Please select date.',
                                 },
                               ]}
-                              style={{ width: '100%' }}
+                              style={{ height: '100%' }}
                             >
                               <DatePicker
-                                className="fromDate"
+                                style={{ width: '100%' }}
+                                // className="form-control"
                                 format="MM-DD-YYYY"
                                 disabledDate={(date) => disabledFromDate(date, index)}
                                 onChange={(value) => handleFromChange(value, index)}
@@ -265,13 +266,15 @@ const DynamicField = (props) => {
                                   message: 'Please select date.',
                                 },
                               ]}
-                              style={{ width: '100%', marginLeft: '20px' }}
+                              style={{ marginLeft: '10px', height: '100%' }}
                             >
                               <DatePicker
+                                style={{ width: '100%' }}
                                 format="MM-DD-YYYY"
                                 disabledDate={(date) => disabledToDate(date, index)}
                                 onChange={(value) => handleToChange(value, index)}
                                 placeholder={'To Date'}
+                                // className="form-control"
                               />
                             </FormItem>
                           </div>
