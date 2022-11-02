@@ -36,10 +36,30 @@ const DynamicField = (props) => {
     resetFields();
     setFromDate({});
     setToDate({});
+
     reportSearchParameter ? searchCriteria(reportSearchParameter) : searchCriteria();
   };
 
   const handleFieldNameChange = (value, k) => {
+    setFields([
+      {
+        name: ['searchKeys', [`${k}`], 'condition'],
+        value: '',
+      },
+      {
+        name: ['searchKeys', [`${k}`], 'value'],
+        value: '',
+      },
+      {
+        name: ['searchKeys', [`${k}`], 'fromDate'],
+        value: '',
+      },
+      {
+        name: ['searchKeys', [`${k}`], 'toDate'],
+        value: '',
+      },
+    ]);
+
     if (value) {
       const conditionList = exactMatchByKey(value, filterFields, 'code');
       const conditionValue = getDefaultCondition(conditionList);
@@ -375,11 +395,7 @@ const DynamicField = (props) => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button
-                    className="ant-btn no-underline ml-2"
-                    icon={<ReloadOutlined />}
-                    onClick={() => resetFilterFields()}
-                  >
+                  <Button className="ant-btn no-underline ml-2" onClick={() => resetFilterFields()}>
                     Reset
                   </Button>
                 </Col>

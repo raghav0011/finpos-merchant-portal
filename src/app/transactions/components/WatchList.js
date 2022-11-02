@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import FilterField from '../../shared/FilterField/index';
+import { ReloadOutlined } from '@ant-design/icons';
 
 import InfiniteTable from '../../shared/InfinteTable/index';
 import FormItem from 'antd/lib/form/FormItem';
@@ -298,6 +299,7 @@ const List = (props) => {
           }}
           className="btn-custom-field mb-2 mt-n4"
           // icon="reload"
+          icon={<ReloadOutlined />}
         >
           Refresh
         </Button>

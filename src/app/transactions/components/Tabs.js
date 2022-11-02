@@ -167,7 +167,7 @@ const Tab = (props) => {
                   {...props}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane tab={'All Transaction'} key={'allTransaction'}>
+              <Tabs.TabPane tab={'All Transactions'} key={'allTransaction'}>
                 <AllTransaction
                   pagination={pagination}
                   setPagination={setPagination}
