@@ -1,46 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { message } from 'antd';
 
-import { fetch, store } from '../../../utils/httpUtil';
+import { download, fetch, store } from '../../../utils/httpUtil';
 
-const base = 'transaction-manager/v1/admin/transactions';
-
-export const performTransaction = createAsyncThunk(
-  'transaction/perform',
+export const fetchTodayTransactionWithCriteria = createAsyncThunk(
+  'transaction/todaylist',
   (formData, { rejectWithValue }) => {
-    return store(`${base}`, formData)
+    return store('v1/filter-transactions', formData)
       .then((response) => {
-        if (response.data.success) {
-          return response.data.data;
-        } else {
-          // TODO
-        }
-      })
-      .catch((error) => rejectWithValue(error.response.data));
-  }
-);
-
-export const fetchTransactionById = createAsyncThunk(
-  'transaction/id',
-  (id, { rejectWithValue }) => {
-    return fetch(`${base}/${id}`)
-      .then((response) => {
-        if (response.data.success) {
-          return response.data.data;
-        } else {
-          // TODO
-        }
-      })
-      .catch((error) => rejectWithValue(error.response.data));
-  }
-);
-
-export const fetchUnmaskedTransactionByRemitKey = createAsyncThunk(
-  'transaction/unmasked',
-  (id, { rejectWithValue }) => {
-    return fetch(`${base}/detail/${id}`)
-      .then((response) => {
-        if (response.data.success) {
-          return response.data.data;
+        if (response.data.message === 'SUCCESS') {
+          return response.data;
         } else {
           // TODO
         }
@@ -52,10 +21,24 @@ export const fetchUnmaskedTransactionByRemitKey = createAsyncThunk(
 export const fetchTransactionListByCriteria = createAsyncThunk(
   'transaction/list',
   (formData, { rejectWithValue }) => {
-    return store(`${base}/search`, formData)
+    return store('v1/filter-transactions', formData)
       .then((response) => {
-        if (response.data.success) {
-          return response.data.data;
+        if (response.data.message === 'SUCCESS') {
+          return response.data;
+        } else {
+          // TODO
+        }
+      })
+      .catch((error) => rejectWithValue(error.response.data));
+  }
+);
+export const fetchTransactionWatchListWithCriteria = createAsyncThunk(
+  'transaction/Watchlist',
+  (formData, { rejectWithValue }) => {
+    return store('v1/watchlist', formData)
+      .then((response) => {
+        if (response.data.message === 'SUCCESS') {
+          return response.data;
         } else {
           // TODO
         }
@@ -68,63 +51,28 @@ const transactionListPending = ['transaction/list/pending'];
 const transactionListFulfilled = ['transaction/list/fulfilled'];
 const transactionListRejected = ['transaction/list/rejected'];
 
-const transactionDetailPending = [
-  'transaction/perform/pending',
-  'transaction/id/pending',
-  'transaction/unmasked/pending',
-];
-const transactionDetailFulfilled = ['transaction/id/fulfilled', 'transaction/unmasked/fulfilled'];
-const transactionDetailRejected = [
-  'transaction/perform/rejected',
-  'transaction/id/fulfilled',
-  'transaction/unmasked/rejected',
-];
+const transactionTodayListPending = ['transaction/todaylist/pending'];
+const transactionTodayListFulfilled = ['transaction/todaylist/fulfilled'];
+const transactionTodayListRejected = ['transaction/todaylist/rejected'];
 
-const transactionDefaultFulfilled = ['transaction/perform/fulfilled'];
+const transactionWatchListPending = ['transaction/Watchlist/pending'];
+const transactionWatchListFulfilled = ['transaction/Watchlist/fulfilled'];
+const transactionWatchListRejected = ['transaction/Watchlist/rejected'];
 
 export const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
-    detailPayload: {},
     payload: [],
-    detailLoading: false,
     loading: false,
-    detailErrors: {},
     errors: {},
     pagination: {},
+    totalApprovedAmounts: [],
   },
   reducers: {
-    cleanTransaction(state) {
-      state.loading = false;
-      state.detailLoading = false;
-      state.detailPayload = [];
-      state.payload = [];
-      state.errors = {};
-      state.detailErrors = {};
-      state.pagination = {
-        current: 0,
-        pageSize: 0,
-        total: 0,
-        totalPage: 0,
-      };
-    },
-
-    cleanTransactionDetails(state) {
-      state.detailLoading = false;
-      state.detailPayload = {};
-      state.detailErrors = {};
-    },
     cleanTransactionList(state) {
       state.loading = false;
       state.payload = [];
       state.errors = {};
-    },
-
-    cleanTransactionErrors(state) {
-      state.loading = false;
-      state.detailLoading = false;
-      state.errors = {};
-      state.detailErrors = {};
     },
   },
   extraReducers: (builder) => {
@@ -135,62 +83,144 @@ export const transactionSlice = createSlice({
           state.loading = true;
         }
       )
-      .addMatcher(
-        (action) => transactionDetailPending.includes(action.type),
-        (state, action) => {
-          state.detailLoading = true;
-        }
-      )
+
       .addMatcher(
         (action) => transactionListRejected.includes(action.type),
         (state, action) => {
           state.loading = false;
-          state.errors = action.payload;
+          state.errors = action.data;
         }
       )
-      .addMatcher(
-        (action) => transactionDetailRejected.includes(action.type),
-        (state, action) => {
-          state.detailLoading = false;
-          state.detailErrors = action.payload;
-        }
-      )
-      .addMatcher(
-        (action) => transactionDefaultFulfilled.includes(action.type),
-        (state, action) => {
-          state.detailLoading = false;
-          state.loading = false;
-        }
-      )
+
       .addMatcher(
         (action) => transactionListFulfilled.includes(action.type),
         (state, action) => {
           state.loading = false;
-          state.payload = action.payload.data;
+          state.payload = [...state.payload, ...action.payload.data.data];
           state.errors = {};
           state.pagination = {
-            current: action.payload?.pagination?.page_number,
-            pageSize: action.payload?.pagination?.page_size,
-            total: action.payload?.pagination?.total_records,
-            totalPage: action.payload?.pagination?.total_pages,
+            current: action.payload.data.currentPage,
+            pageSize: action.payload.data.pageSize,
+            total: action.payload.data.totalRecord,
+            totalPage: action.payload.data.totalPage,
+            showSizeChanger: true,
+          };
+          state.totalApprovedAmounts = action.payload.data.totalApprovedAmounts;
+        }
+      )
+      .addMatcher(
+        (action) => transactionWatchListPending.includes(action.type),
+        (state, action) => {
+          state.loading = true;
+        }
+      )
+
+      .addMatcher(
+        (action) => transactionWatchListRejected.includes(action.type),
+        (state, action) => {
+          state.loading = false;
+          state.errors = action.data;
+        }
+      )
+
+      .addMatcher(
+        (action) => transactionWatchListFulfilled.includes(action.type),
+        (state, action) => {
+          state.loading = false;
+          state.payload = [...state.payload, ...action.payload.data.data];
+          state.errors = {};
+          state.pagination = {
+            current: action.payload.data.currentPage,
+            pageSize: action.payload.data.pageSize,
+            total: action.payload.data.totalRecord,
+            totalPage: action.payload.data.totalPage,
             showSizeChanger: true,
           };
         }
       )
       .addMatcher(
-        (action) => transactionDetailFulfilled.includes(action.type),
+        (action) => transactionTodayListPending.includes(action.type),
         (state, action) => {
-          state.detailLoading = false;
-          state.detailPayload = action.payload?.[0];
-          state.detailErrors = {};
+          state.loading = true;
+        }
+      )
+
+      .addMatcher(
+        (action) => transactionTodayListRejected.includes(action.type),
+        (state, action) => {
+          state.loading = false;
+          state.errors = action.data;
+        }
+      )
+
+      .addMatcher(
+        (action) => transactionTodayListFulfilled.includes(action.type),
+        (state, action) => {
+          state.loading = false;
+          state.payload = [...state.payload, ...action.payload.data.data];
+          state.errors = {};
+          state.pagination = {
+            current: action.payload.data.currentPage,
+            pageSize: action.payload.data.pageSize,
+            total: action.payload.data.totalRecord,
+            totalPage: action.payload.data.totalPage,
+            showSizeChanger: true,
+          };
+          state.totalApprovedAmounts = action.payload.data.totalApprovedAmounts;
         }
       );
   },
 });
 
-export const {
-  cleanTransaction,
-  cleanTransactionDetails,
-  cleanTransactionErrors,
-  cleanTransactionList,
-} = transactionSlice.actions;
+//TRANSACTIONFILTERFIELD
+// 12
+export const fetchTransactionFilterField = createAsyncThunk(
+  'transaction/filterfield',
+  (_, { rejectWithValue }) => {
+    return fetch('v1/filter-fields/transactions')
+      .then((response) => {
+        if (response.data.message === 'SUCCESS') {
+          return response.data.data;
+        } else {
+          // TODO
+        }
+      })
+      .catch((error) => rejectWithValue(error?.response?.data || error));
+  }
+);
+
+export const transactionFilterFieldSlice = createSlice({
+  name: 'transactionFilterField',
+  initialState: {
+    payload: [],
+    loading: false,
+    errors: {},
+    pagination: {},
+  },
+  extraReducers: {
+    // 12
+    [fetchTransactionFilterField.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchTransactionFilterField.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.payload = action.payload;
+      state.errors = {};
+    },
+    [fetchTransactionFilterField.rejected]: (state, action) => {
+      state.errors = action.payload;
+      state.loading = false;
+    },
+  },
+  reducers: {
+    cleanTransactionFilterField(state) {
+      state.payload = [];
+      state.loading = false;
+      state.errors = {};
+    },
+  },
+});
+
+export const { cleanTransaction, cleanTransactionList } = transactionSlice.actions;
+export const { cleanTransactionFilterField } = transactionFilterFieldSlice.actions;
+export default transactionSlice;

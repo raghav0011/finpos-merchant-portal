@@ -1,32 +1,48 @@
 .dynamic-delete-button {
   cursor: pointer;
-  font-size: 22px;
+  position: relative;
+  font-size: 24px;
   transition: all 0.3s;
   color: #ff2323;
-  margin-top: 7px;
 }
-
 .dynamic-delete-button:hover {
   color: #777;
   border-color: #ff2323 !important;
 }
-
 .dynamic-delete-button[disabled] {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
+.dynamic-field .ant-form-item {
+  margin-bottom: 0;
+}
+
 .btn-custom-field {
+  width: 8rem;
   color: #fff;
-  background-color: #0747a6;
+  background-color: #7178b9;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
 }
 
 .btn-custom-field:hover {
-  background-color: #0065ff !important;
+  background-color: #7acceb !important;
   color: #fff;
-  border-color: #0065ff !important;
+  border-color: #7acceb !important;
+}
+
+.btn-save {
+  color: #fff;
+  background-color: #7178b9;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+.btn-save:hover {
+  background-color: #7acceb !important;
+  color: #fff;
+  border-color: #7acceb !important;
 }
 
 .filter-field-table tr:nth-child(even) {
@@ -35,13 +51,32 @@
 
 .filter-field-table .table th,
 .filter-field-table .table td {
-  padding: 0.2rem 0.2rem 0.2rem 0.2rem;
+  padding: 0rem;
 }
 
 .filter-field-table .table {
   min-width: 720px;
 }
 
-.search-form .ant-form-item {
-  margin-bottom: 5px;
+/* new dynamic search styles */
+.search-form .ant-form-item-control {
+  line-height: 1;
+}
+
+.mt-m2_5rem {
+  margin-top: 1.5rem;
+}
+
+.search-form .ant-form-vertical .ant-form-item-label,
+.ant-col-24.ant-form-item-label,
+.ant-col-xl-24.ant-form-item-label {
+  padding: 0;
+  line-height: 1;
+}
+
+.search-form .ant-form-item label {
+  font-weight: normal;
+}
+a.ant-calendar-prev-month-btn {
+  display: none;
 }

@@ -14,18 +14,17 @@ import {
 } from '../constants';
 import { getLocalStorage, setLocalStorage, clearLocalStorage } from './storageUtil';
 
-const normalHeaders = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-  Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
-};
-const downloadableHeaders = {
-  Accept: '*/*',
-  'Content-Type': 'application/json',
-  Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
-};
-
 export const httpBase = (isDownloadable = false) => {
+  const normalHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'X-XSRF-TOKEN': getLocalStorage(JWT_TOKEN),
+  };
+  const downloadableHeaders = {
+    Accept: '*/*',
+    'Content-Type': 'application/json',
+    'X-XSRF-TOKEN': getLocalStorage(JWT_TOKEN),
+  };
   const api = axios.create({
     baseURL: `${API_URL}`,
     headers: isDownloadable ? downloadableHeaders : normalHeaders,
@@ -41,15 +40,15 @@ export const httpBase = (isDownloadable = false) => {
     },
     (error) => {
       if (401 === error.response.status) {
-        axios.post(
-          API_URL + '/config/v1/auths/logout',
-          {},
-          {
-            headers: {
-              Authorization: `bearer ${getLocalStorage(JWT_TOKEN)}`,
-            },
-          }
-        );
+        // axios.post(
+        //   API_URL + '/config/v1/auths/logout',
+        //   {},
+        //   {
+        //     headers: {
+        //       Authorization: getLocalStorage(JWT_TOKEN),
+        //     },
+        //   }
+        // );
         clearLocalStorage(JWT_TOKEN);
         clearLocalStorage(PERMISSION_KEY);
         clearLocalStorage(USER_FULL_NAME);

@@ -32,10 +32,10 @@ const LoginForm = () => {
 
               <Form onFinish={onFinish} className="login-form">
                 <FormItem
-                  name="user_id"
+                  name="userId"
                   rules={[
                     { required: true, message: 'Please input your username' },
-                    { type: 'email', message: 'Please input valid username' },
+                    // { type: 'email', message: 'Please input valid username' },
                   ]}
                 >
                   <Input

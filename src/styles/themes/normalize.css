@@ -481,6 +481,9 @@ tr:nth-child(even) .btn-circle {
 .filter-field-dropdown .ant-select {
   width: 94%;
 }
+.ant-select-show-search.ant-select:not(.ant-select-customize-input) .ant-select-selector input {
+  cursor: pointer;
+}
 
 .chart-container {
   display: flex;
