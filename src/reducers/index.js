@@ -23,6 +23,7 @@ import { branchSlice } from '../app/userManagement/slice/branchSlice';
 import { userSlice } from '../app/userManagement/slice/userSlice';
 import { roleSlice } from '../app/userManagement/slice/roleSlice';
 import { permissionSlice as rolePermissionSlice } from '../app/userManagement/slice/permissionSlice';
+import operationManualSlice from '../app/support/slice/operationManualSlice';
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   transactionFilterField: transactionFilterFieldSlice.reducer,
 
   summary: dashboardSummarySlice.reducer,
+  OperationManual: operationManualSlice.reducer,
 });
 
 export default rootReducer;

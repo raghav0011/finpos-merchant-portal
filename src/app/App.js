@@ -27,6 +27,7 @@ const AsyncUser = loadable(() => import('./settings/users/'));
 const AsyncUserManagement = loadable(() => import('./userManagement'));
 const AsyncFormFields = loadable(() => import('./settings/fields/'));
 const AsyncProfile = loadable(() => import('./profile/'));
+const AsyncSupport = loadable(() => import('./support/'));
 
 const AsyncTransaction = loadable(() => import('./transactions/'));
 
@@ -52,6 +53,7 @@ const App = () => (
       />
 
       <PrivateRoute path="/profile" layout={AsyncAppLayout} component={AsyncProfile} />
+      <PrivateRoute path="/support" layout={AsyncAppLayout} component={AsyncSupport} />
       <PrivateRoute
         path="/setting/password-policy"
         layout={AsyncAppLayout}

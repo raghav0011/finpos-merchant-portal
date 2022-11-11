@@ -16,6 +16,12 @@ const menuRoutes = [
   // },
 
   {
+    menuName: 'Support',
+    name: 'support',
+    iconName: 'DollarCircleOutlined',
+    path: '/support',
+  },
+  {
     menuName: 'Transactions',
     name: 'transactions',
     iconName: 'DollarCircleOutlined',
