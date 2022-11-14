@@ -5,18 +5,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { pdfView } from '../slice/operationManualSlice';
 
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
+//*for PDF Package
+import { Document, Page, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+//*
 
 function OperationManual() {
   const { pdfItems, isLoading } = useSelector((state) => state.OperationManual);
-  // console.log(pdfItems);
-  // console.log(isLoading);
-  // console.log(pdfItems);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(pdfView());
   }, []);
+
+  //*for PDF Package
 
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
@@ -24,6 +33,7 @@ function OperationManual() {
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
+  //*
 
   return (
     <div className="container-fluid no-breadcrumb page-dashboard ">
@@ -54,18 +64,20 @@ function OperationManual() {
         >
           <Tabs.TabPane tab="Operation Manual" key="1"></Tabs.TabPane>
         </Tabs>
-        <Card className="card" style={{ border: 'none' }}>
-          {/* <div>{pdfItems?.pdf_link}</div> */}
-          <Document
-            file="https://www.buds.com.ua/images/Lorem_ipsum.pdf"
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} />
+        <div
+          style={{
+            overflow: 'auto',
+            width: '100%',
+            height: '700px',
+            flexDirection: 'column',
+          }}
+        >
+          <Document file="Support.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+            ))}
           </Document>
-          <p>
-            Page {pageNumber} of {numPages}
-          </p>
-        </Card>
+        </div>
       </div>
     </div>
   );

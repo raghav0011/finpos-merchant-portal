@@ -1,6 +1,12 @@
 /* config-overrides.js */
 
-const { override, fixBabelImports, addLessLoader, addWebpackAlias } = require('customize-cra');
+const {
+  override,
+  fixBabelImports,
+  addLessLoader,
+  addWebpackAlias,
+  addExternalBabelPlugins,
+} = require('customize-cra');
 const path = require('path');
 
 module.exports = override(
@@ -17,4 +23,8 @@ module.exports = override(
   addWebpackAlias({
     ['@styles']: path.resolve(__dirname, 'src/styles'),
   }),
+  ...addExternalBabelPlugins(
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-proposal-private-methods'
+  )
 );
