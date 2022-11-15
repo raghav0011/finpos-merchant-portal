@@ -4,14 +4,14 @@ import axios from 'axios';
 const url = 'https://apimocha.com/support-pdf/finpos_mannual_pdf';
 
 const initialState = {
-  pdfItems: [],
+  pdfItems: {},
   isLoading: true,
 };
 
 export const pdfView = createAsyncThunk('pdfView/get', async () => {
   try {
     const resp = await axios(url);
-    // console.log(resp.data.data);
+    console.log(resp.data.data);
 
     return resp.data.data;
   } catch (error) {}

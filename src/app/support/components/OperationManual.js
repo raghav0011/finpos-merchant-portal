@@ -3,6 +3,8 @@ import { Tabs, Button } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import { useState } from 'react';
 import ReactToPrint from 'react-to-print';
+import { TitleBar } from '../../shared/TitleBar';
+import operationManualSlice from '../slice/operationManualSlice';
 
 //*Pdf css
 
@@ -15,6 +17,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useRef } from 'react';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 pdfjs.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
@@ -27,6 +30,9 @@ function OperationManual(props) {
   useEffect(() => {
     pdfView();
   }, []);
+
+  const { pdfItems } = useSelector((state) => state.OperationManual);
+  // console.log(pdfItems);
 
   //*for PDF Package
 
@@ -42,7 +48,7 @@ function OperationManual(props) {
   // Function will execute on click of button
   const onButtonClick = () => {
     // using Java Script method to get PDF file
-    fetch('Support.pdf').then((response) => {
+    fetch('pdfItems.pdf_link').then((response) => {
       response.blob().then((blob) => {
         // Creating new object of PDF file
         const fileURL = window.URL.createObjectURL(blob);
@@ -70,16 +76,24 @@ function OperationManual(props) {
   return (
     <div className="container-fluid no-breadcrumb page-dashboard ">
       {/* main */}
+
       <QueueAnim type="right" className="ui-animate">
         <div
           className="article__section"
           style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
         >
-          <article className="article">
+          {/* <article className="article">
             <h4 className="article-title mb-2 ">Terminal Operation Manual</h4>
-          </article>
+          </article> */}
         </div>
       </QueueAnim>
+      <TitleBar
+        title={'Terminal Operation Manual'}
+        breadCrumbObject={{
+          Support: '/support',
+          'Terminal Operation Manual': '',
+        }}
+      />
 
       <Tabs
         destroyInactiveTabPane
@@ -121,7 +135,7 @@ function OperationManual(props) {
             flexDirection: 'column',
           }}
         >
-          <Document file="Support.pdf" onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
+          <Document file={pdfItems.pdf_link} onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} width={1000} />
             ))}
