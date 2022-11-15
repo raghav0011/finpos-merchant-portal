@@ -1,24 +1,33 @@
 import React from 'react';
-import { Tabs, Button, Card } from 'antd';
+import { Tabs, Button } from 'antd';
 import QueueAnim from 'rc-queue-anim';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { pdfView } from '../slice/operationManualSlice';
+import { useState } from 'react';
 import ReactToPrint from 'react-to-print';
+
+//*Pdf css
 
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
+//*
+
 //*for PDF Package
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useRef } from 'react';
+import { useEffect } from 'react';
 
 pdfjs.GlobalWorkerOptions.workerSrc =
   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 //*
 
-function OperationManual() {
+function OperationManual(props) {
+  const { pdfView } = props;
+
+  useEffect(() => {
+    pdfView();
+  }, []);
+
   //*for PDF Package
 
   const [numPages, setNumPages] = useState(null);
@@ -45,6 +54,7 @@ function OperationManual() {
       });
     });
   };
+
   function handlePrint(divName) {
     // var printContents = document.getElementById(divName).innerHTML;
     var printContents = document.getElementById(divName).innerHTML;
@@ -68,74 +78,54 @@ function OperationManual() {
           <article className="article">
             <h4 className="article-title mb-2 ">Terminal Operation Manual</h4>
           </article>
-          <div>
-            <Button className="btn-custom-field mb-2 mt-n4" onClick={onButtonClick}>
-              Download
-            </Button>
-            <ReactToPrint
-              trigger={() => {
-                return (
-                  <Button
-                    onClick={() => handlePrint('printableArea')}
-                    // onClick={() => handlePrint2()}
-                    className="btn-custom-field mb-2 mt-n4"
-                    style={{ marginLeft: '20px' }}
-                  >
-                    Print
-                  </Button>
-                );
-              }}
-              content={() => pdfRef.current}
-            />
-            {/* <Button
-              onClick={() => handlePrint('printableArea')}
-              // onClick={() => handlePrint2()}
-              className="btn-custom-field mb-2 mt-n4"
-              style={{ marginLeft: '20px' }}
-            >
-              Print
-            </Button> */}
-          </div>
         </div>
       </QueueAnim>
+
+      <Tabs
+        destroyInactiveTabPane
+        tabPosition="top"
+        animated={true}
+        tabBarStyle={{ background: '#ffffff', paddingLeft: '20px' }}
+        tabBarGutter={70}
+      >
+        <Tabs.TabPane tab="Operation Manual" key="1"></Tabs.TabPane>
+      </Tabs>
+
+      <div className="d-flex" style={{ width: '100%', justifyContent: 'flex-end' }}>
+        <Button className="btn-custom-field mb-2 mt-n4" onClick={onButtonClick}>
+          Download
+        </Button>
+        <ReactToPrint
+          trigger={() => {
+            return (
+              <Button
+                onClick={() => handlePrint('printableArea')}
+                className="btn-custom-field mb-2 mt-n4"
+                style={{ marginLeft: '20px' }}
+              >
+                Print
+              </Button>
+            );
+          }}
+          content={() => pdfRef.current}
+        />
+      </div>
+
       <div className="card">
-        <Tabs
-          destroyInactiveTabPane
-          tabPosition="top"
-          animated={true}
-          tabBarStyle={{ background: '#ffffff', marginLeft: '20px' }}
-          tabBarGutter={70}
+        <div
+          id="printableArea"
+          style={{
+            overflow: 'auto',
+            width: '100%',
+            height: '700px',
+            flexDirection: 'column',
+          }}
         >
-          <Tabs.TabPane tab="Operation Manual" key="1"></Tabs.TabPane>
-        </Tabs>
-        <div style={{ marginLeft: '350px' }}>
-          <div
-            id="printableArea"
-            style={{
-              overflow: 'auto',
-              width: '100%',
-              height: '700px',
-              flexDirection: 'column',
-            }}
-          >
-            {/* <ReactToPrint
-            trigger={() => {
-              return <a>Print this out!</a>;
-            }}
-            content={() => pdfRef.current}
-          /> */}
-            <Document
-              file="Support.pdf"
-              onLoadSuccess={onDocumentLoadSuccess}
-              ref={pdfRef}
-              className="blockquote text-center"
-              width="1000"
-            >
-              {Array.from(new Array(numPages), (el, index) => (
-                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-              ))}
-            </Document>
-          </div>
+          <Document file="Support.pdf" onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page key={`page_${index + 1}`} pageNumber={index + 1} width={1000} />
+            ))}
+          </Document>
         </div>
       </div>
     </div>
