@@ -68,7 +68,7 @@ const AuthProvider = (props) => {
     return axios
       .post(API_URL + '/v1/auth/login', { userId, password })
       .then((response) => {
-        if (response.data.message === 'sucess') {
+        if (!response.data.data.enforcePasswordChange) {
           setLoading(false);
           handleLoginActions(response);
           // return response;

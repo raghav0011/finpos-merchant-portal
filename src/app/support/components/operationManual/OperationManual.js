@@ -3,8 +3,9 @@ import { Tabs, Button } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import { useState } from 'react';
 import ReactToPrint from 'react-to-print';
-import { TitleBar } from '../../shared/TitleBar';
-import operationManualSlice from '../slice/operationManualSlice';
+import { TitleBar } from '../../../shared/TitleBar';
+// import pdf from '../../assets/Support.pdf';
+import pdf from '../../assets/Support.pdf';
 
 //*Pdf css
 
@@ -25,13 +26,13 @@ pdfjs.GlobalWorkerOptions.workerSrc =
 //*
 
 function OperationManual(props) {
-  const { pdfView } = props;
+  // const { pdfView } = props;
 
-  useEffect(() => {
-    pdfView();
-  }, []);
+  // useEffect(() => {
+  //   pdfView();
+  // }, []);
 
-  const { pdfItems } = useSelector((state) => state.OperationManual);
+  // const { pdfItems } = useSelector((state) => state.OperationManual);
   // console.log(pdfItems);
 
   //*for PDF Package
@@ -48,7 +49,7 @@ function OperationManual(props) {
   // Function will execute on click of button
   const onButtonClick = () => {
     // using Java Script method to get PDF file
-    fetch('pdfItems.pdf_link').then((response) => {
+    fetch(pdf).then((response) => {
       response.blob().then((blob) => {
         // Creating new object of PDF file
         const fileURL = window.URL.createObjectURL(blob);
@@ -131,11 +132,13 @@ function OperationManual(props) {
           style={{
             overflow: 'auto',
             width: '100%',
-            height: '700px',
+            // height: '700px',
+            height: '100vh',
             flexDirection: 'column',
           }}
         >
-          <Document file={pdfItems.pdf_link} onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
+          {/* file={pdfItems.pdf_link} */}
+          <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} width={1000} />
             ))}
