@@ -4,7 +4,6 @@ import QueueAnim from 'rc-queue-anim';
 import { useState } from 'react';
 import ReactToPrint from 'react-to-print';
 import { TitleBar } from '../../../shared/TitleBar';
-// import pdf from '../../assets/Support.pdf';
 import pdf from '../../assets/Support.pdf';
 
 //*Pdf css
@@ -26,15 +25,6 @@ pdfjs.GlobalWorkerOptions.workerSrc =
 //*
 
 function OperationManual(props) {
-  // const { pdfView } = props;
-
-  // useEffect(() => {
-  //   pdfView();
-  // }, []);
-
-  // const { pdfItems } = useSelector((state) => state.OperationManual);
-  // console.log(pdfItems);
-
   //*for PDF Package
 
   const [numPages, setNumPages] = useState(null);
@@ -63,7 +53,6 @@ function OperationManual(props) {
   };
 
   function handlePrint(divName) {
-    // var printContents = document.getElementById(divName).innerHTML;
     var printContents = document.getElementById(divName).innerHTML;
     var originalContents = document.body.innerHTML;
 
@@ -82,11 +71,7 @@ function OperationManual(props) {
         <div
           className="article__section"
           style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
-        >
-          {/* <article className="article">
-            <h4 className="article-title mb-2 ">Terminal Operation Manual</h4>
-          </article> */}
-        </div>
+        ></div>
       </QueueAnim>
       <TitleBar
         title={'Terminal Operation Manual'}
@@ -137,7 +122,6 @@ function OperationManual(props) {
             flexDirection: 'column',
           }}
         >
-          {/* file={pdfItems.pdf_link} */}
           <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess} ref={pdfRef}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} width={1000} />
